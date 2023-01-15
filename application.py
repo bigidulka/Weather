@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QComboBox, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QMouseEvent, QCursor, QIcon
+from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSystemTrayIcon
 from yaweather import cities
 from weatherdata import WeatherData
 
@@ -12,11 +13,15 @@ class WeatherApp(QWidget):
     def initUI(self):
         # geometry app
         self.setGeometry(50, 50, 300, 200)
-        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         
         # Create a label to display the weather
         self.weather_label = QLabel()
-        self.weather_label.setAlignment(Qt.AlignCenter)
+        self.weather_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Create a layout
+        self.top_layout = QHBoxLayout()
+        self.top_layout.addStretch()
 
         # Create box locate
         self.create_cb_countries()
@@ -26,7 +31,7 @@ class WeatherApp(QWidget):
         
         # Add the buttons layout to the main layout
         main_layout = QVBoxLayout(self)
-        main_layout.addLayout(self.buttons_layout)
+        main_layout.addLayout(self.top_layout)
         main_layout.addWidget(self.weather_label)
         main_layout.addWidget(self.countries_combo)
         main_layout.addWidget(self.cities_combo)
@@ -39,10 +44,10 @@ class WeatherApp(QWidget):
         condition = self.weather_data.condition
 
         weather = (f'''Now: {temperature} °C,
-                       feels like {feel_temperature} °C, 
-                       humidity: {humidity}, 
-                       cloudness: {cloudness}, 
-                       condition: {condition}''')
+                    feels like {feel_temperature} °C, 
+                    humidity: {humidity}, 
+                    cloudness: {cloudness}, 
+                    condition: {condition}''')
         
         self.weather_label.setText(weather)
 
@@ -60,28 +65,26 @@ class WeatherApp(QWidget):
             return
         country = self.countries_combo.currentText()
         country_class = getattr(cities, country)
-
         coordinates = country_class.cities()[city]
         self.weather_data = WeatherData(coordinates)
-
         self.display_weather()
 
     def create_control_buttons(self):
         # Create close and minimize buttons
         close_button = QPushButton("x")
         close_button.setFixedSize(30, 30)
+        close_button.setAutoFillBackground(False)
         close_button.clicked.connect(QApplication.instance().quit)
 
         minimize_button = QPushButton("-")
         minimize_button.setFixedSize(30, 30)
+        minimize_button.setAutoFillBackground(False)
         minimize_button.clicked.connect(self.showMinimized)
 
         # Create a horizontal layout for the buttons
-        self.buttons_layout = QHBoxLayout()
-        self.buttons_layout.addStretch()
-        self.buttons_layout.addWidget(minimize_button)
-        self.buttons_layout.addWidget(close_button)
-        self.buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.top_layout.addWidget(minimize_button)
+        self.top_layout.addWidget(close_button)
+        self.top_layout.setContentsMargins(0, 0, 0, 0) # set the value of the margins
 
     def create_cb_countries(self):
         self.countries_combo = QComboBox()
@@ -107,4 +110,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     weather_app = WeatherApp()
     weather_app.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
