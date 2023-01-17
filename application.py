@@ -2,8 +2,9 @@ import sys
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QMouseEvent, QCursor, QIcon
 from PyQt6.QtWidgets import QApplication, QComboBox, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSystemTrayIcon
-from yaweather import cities
 from weatherdata import WeatherData
+from yaweather import cities
+
 
 class WeatherApp(QWidget):
     def __init__(self):
@@ -56,7 +57,9 @@ class WeatherApp(QWidget):
         if not country:
             return
         self.cities_combo.setEnabled(True)
+
         country_class = getattr(cities, country)
+
         self.populate_cities_combo(country_class)
 
     def city_changed(self):
@@ -64,8 +67,10 @@ class WeatherApp(QWidget):
         if not city:
             return
         country = self.countries_combo.currentText()
+
         country_class = getattr(cities, country)
         coordinates = country_class.cities()[city]
+
         self.weather_data = WeatherData(coordinates)
         self.display_weather()
 
@@ -88,8 +93,10 @@ class WeatherApp(QWidget):
 
     def create_cb_countries(self):
         self.countries_combo = QComboBox()
+
         countries = [c.name() for c in cities.CountryBase.__subclasses__()]
         countries.sort()
+        
         self.countries_combo.addItems(countries)
         self.countries_combo.currentIndexChanged.connect(self.country_changed)
         self.countries_combo.setCurrentIndex(-1)
@@ -101,8 +108,10 @@ class WeatherApp(QWidget):
 
     def populate_cities_combo(self, country_class):
         self.cities_combo.clear()
+
         cities_ = country_class.cities()
         cities_ = dict(sorted(cities_.items()))
+
         self.cities_combo.addItems(cities_.keys())
 
 
