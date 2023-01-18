@@ -3,12 +3,13 @@ import geocoder
 import requests
 
 class Location:
+    
     @classmethod
-    def countries(cls):
+    def get_countries(cls):
         return sorted([c.name() for c in cities.CountryBase.__subclasses__()])
     
     @classmethod
-    def cities(cls, country):
+    def get_cities(cls, country):
         country_class = getattr(cities, country)
         cities_ = dict(sorted(country_class.cities().items()))
         return cities_.keys()
@@ -26,3 +27,8 @@ class Location:
     def getLocation(cls):
         geo = geocoder.ip(cls.getIP())
         return geo.city, geo.country, geo.latlng
+    
+    @classmethod
+    def add_city(cls, country, city, coordinates):
+        country_class = getattr(cities, country)
+        country_class.cities()[city] = coordinates
