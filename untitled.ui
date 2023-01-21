@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>599</width>
+    <width>600</width>
     <height>605</height>
    </rect>
   </property>
@@ -51,7 +51,7 @@ QComboBox {
 }
 
 QComboBox:hover {
-	background-color: #9e9e9ea9 
+	color: #9e9e9ea9 ;
 }</string>
   </property>
   <property name="animated">

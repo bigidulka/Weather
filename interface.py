@@ -13,7 +13,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowModality(QtCore.Qt.WindowModality.NonModal)
-        MainWindow.resize(599, 605)
+        MainWindow.resize(600, 605)
         MainWindow.setMaximumSize(QtCore.QSize(600, 605))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(".\\path/sunny_weather.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QComboBox:hover {\n"
-"    background-color: #9e9e9ea9 \n"
+"    color: #9e9e9ea9 ;\n"
 "}")
         MainWindow.setAnimated(True)
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)

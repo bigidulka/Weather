@@ -34,7 +34,7 @@ class createGUI(QtWidgets.QMainWindow, interface.Ui_MainWindow):
         
         # info weather
         # self.cities.currentIndexChanged.connect(self.all_info)
-    
+
         # combo box country and city
         self.countries.addItems(Location.get_countries())
         self.countries.currentIndexChanged.connect(self.country_changed)
