@@ -13,11 +13,6 @@ class Location:
         country_class = getattr(cities, country)
         cities_ = dict(sorted(country_class.cities().items()))
         return cities_.keys()
-    
-    @classmethod
-    def get_coordinates_city(cls, country, city):
-        country_class = getattr(cities, country)
-        return country_class.cities()[city]
 
     @classmethod
     def getIP(cls):
@@ -29,6 +24,8 @@ class Location:
         return geo.city, geo.country, geo.latlng
     
     @classmethod
-    def add_city(cls, country, city, coordinates):
+    def add_city(cls, country, city_name: str, latitude: float, longitude: float):
         country_class = getattr(cities, country)
-        country_class.cities()[city] = coordinates
+        setattr(country_class, city_name, (latitude, longitude))
+        
+Location.add_city("Russia", "Voskresensk", 55.3173, 38.6526)
