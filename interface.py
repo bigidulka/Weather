@@ -16,7 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(600, 605)
         MainWindow.setMaximumSize(QtCore.QSize(600, 605))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(".\\path/sunny_weather.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap(":/close/close.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("QWidget {\n"
@@ -30,24 +30,56 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background-color: #9e9e9ea9 \n"
+"    background-color: #1e90ff;\n"
 "}\n"
 "\n"
 "QComboBox {\n"
-"    background-color: transparent;\n"
-"    color: #575757;\n"
-"    border: none;\n"
+"    border: 1 px solid #ced4da;\n"
+"    border-radius: 4px;\n"
+"    padding-left: 10 px;\n"
 "}\n"
 "\n"
-"QComboBox:hover {\n"
-"    color: #9e9e9ea9 ;\n"
+"QComboBox::drop-down {\n"
+"    border: 0px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(:/buttons/hide.svg);\n"
+"    width:18px;\n"
+"    height: 18px;\n"
+"    margin-right: 10px;\n"
+"}\n"
+"\n"
+"QComboBox: on {\n"
+"    border: 4px solid #c2dbfe\n"
+"}\n"
+"\n"
+"QComboBox QListView {\n"
+"    font-size: 12px;\n"
+"    border: 1px solid rgba(0,0,0,10%);\n"
+"    padding: 5px;\n"
+"    background-color: #fff;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QListView::item {\n"
+"    padding-left: 10px;\n"
+"    background-color: #fff;\n"
+"}\n"
+"\n"
+"QComboBox QListView::item:hover {\n"
+"    background-color: #1e90ff;\n"
+"}\n"
+"\n"
+"QComboBox QListView::item:selected {\n"
+"    background-color: #1e90ff;\n"
 "}")
         MainWindow.setAnimated(True)
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(530, 0, 71, 31))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(430, 0, 171, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -59,7 +91,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.hide_button.sizePolicy().hasHeightForWidth())
         self.hide_button.setSizePolicy(sizePolicy)
-        self.hide_button.setMaximumSize(QtCore.QSize(36, 35))
+        self.hide_button.setMaximumSize(QtCore.QSize(11111, 1111))
         font = QtGui.QFont()
         font.setFamily("Montserrat")
         font.setPointSize(16)
@@ -68,7 +100,7 @@ class Ui_MainWindow(object):
         self.hide_button.setAutoFillBackground(False)
         self.hide_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(".\\path/hide.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/buttons/hide.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.hide_button.setIcon(icon1)
         self.hide_button.setAutoDefault(False)
         self.hide_button.setDefault(False)
@@ -76,12 +108,18 @@ class Ui_MainWindow(object):
         self.hide_button.setObjectName("hide_button")
         self.horizontalLayout.addWidget(self.hide_button)
         self.close_button = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.close_button.setMaximumSize(QtCore.QSize(35, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.close_button.sizePolicy().hasHeightForWidth())
+        self.close_button.setSizePolicy(sizePolicy)
+        self.close_button.setMaximumSize(QtCore.QSize(11111, 11111))
         font = QtGui.QFont()
         font.setFamily("Montserrat")
         font.setPointSize(16)
         self.close_button.setFont(font)
         self.close_button.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
+        self.close_button.setFocusPolicy(QtCore.Qt.FocusPolicy.WheelFocus)
         self.close_button.setStyleSheet("<style>\n"
 ".material-symbols-outlined {\n"
 "  font-variation-settings:\n"
@@ -93,7 +131,7 @@ class Ui_MainWindow(object):
 "</style>")
         self.close_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(".\\path/close.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon2.addPixmap(QtGui.QPixmap(":/buttons/close.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.close_button.setIcon(icon2)
         self.close_button.setFlat(False)
         self.close_button.setObjectName("close_button")
@@ -102,15 +140,29 @@ class Ui_MainWindow(object):
         self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(0, 560, 601, 41))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2.setContentsMargins(3, 0, 3, 0)
+        self.horizontalLayout_2.setSpacing(5)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.cities = QtWidgets.QComboBox(self.horizontalLayoutWidget_2)
+        self.cities.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cities.sizePolicy().hasHeightForWidth())
+        self.cities.setSizePolicy(sizePolicy)
+        self.cities.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
+        self.cities.setEditable(False)
+        self.cities.setCurrentText("")
+        self.cities.setFrame(True)
+        self.cities.setObjectName("cities")
+        self.horizontalLayout_2.addWidget(self.cities)
         self.countries = QtWidgets.QComboBox(self.horizontalLayoutWidget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.countries.sizePolicy().hasHeightForWidth())
         self.countries.setSizePolicy(sizePolicy)
+        self.countries.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.countries.setStyleSheet("\n"
 ".material-symbols-outlined {  font-variation-settings:\n"
 "  \'FILL\' 0,\n"
@@ -123,21 +175,8 @@ class Ui_MainWindow(object):
         self.countries.setFrame(True)
         self.countries.setObjectName("countries")
         self.horizontalLayout_2.addWidget(self.countries)
-        self.cities = QtWidgets.QComboBox(self.horizontalLayoutWidget_2)
-        self.cities.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cities.sizePolicy().hasHeightForWidth())
-        self.cities.setSizePolicy(sizePolicy)
-        self.cities.setFocusPolicy(QtCore.Qt.FocusPolicy.TabFocus)
-        self.cities.setEditable(False)
-        self.cities.setCurrentText("")
-        self.cities.setFrame(True)
-        self.cities.setObjectName("cities")
-        self.horizontalLayout_2.addWidget(self.cities)
         self.Text = QtWidgets.QLabel(self.centralwidget)
-        self.Text.setGeometry(QtCore.QRect(10, 40, 581, 501))
+        self.Text.setGeometry(QtCore.QRect(10, 200, 581, 301))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
