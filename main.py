@@ -1,7 +1,7 @@
 import sys
 
 # my files
-import interface
+from path import interface, rc
 from location import Location
 from weatherdata import WeatherData
 
@@ -32,46 +32,42 @@ class createGUI(QtWidgets.QMainWindow, interface.Ui_MainWindow):
         self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
         self.tray_icon.activated.connect(self.from_tray)
         
-        # info weather
-        # self.cities.currentIndexChanged.connect(self.all_info)
-    
-        # combo box country and city
-        self.countries.addItems(Location.get_countries())
-        self.countries.currentIndexChanged.connect(self.country_changed)
-        
-        self.cities.setEnabled(False)
+        # searching 
+        self.searchbutton.clicked.connect(self.location_search_text)
+        self.searchMe.clicked.connect(self.location_me)
 
-    def city_changed(self):
-        city = self.cities.currentText()
-        if not city:
+    def location_search_text(self):
+        search_string = self.searchtext.text().strip()
+        if not search_string:
+            self.Text.setText("Empty")
             return
-        self.all_info()
-    
-    def country_changed(self):
-        country = self.countries.currentText()
-        if not country:
-            return
-        self.cities.setEnabled(True)
-        self.populate_cities(country)
-        self.cities.currentIndexChanged.connect(self.city_changed)
-    
-    def populate_cities(self, country):
-        self.cities.clear()
-        self.cities.addItems(Location.get_cities(country))
-        
-    def all_info(self):
-        country = self.countries.currentText()
-        city = self.cities.currentText()
-        
-        self.weather_data = WeatherData(country, city)
+                
+        coordinates, country_city = Location.get_info_city(city_and_country=search_string)
 
+        if coordinates is None:
+            self.Text.setText("City not found")
+        else:
+            self.display_location(coordinates)
+
+        
+    def location_me(self):
+        coordinates, country_city = Location.get_location_by_ip()
+
+        self.display_location(coordinates)
+        
+    def display_location(self, coordinates):
+        print(coordinates)
+
+        self.weather_data = WeatherData(coordinates)
+        
         temperature = self.weather_data.temperature
         feel_temperature = self.weather_data.feel_temperature
         humidity = self.weather_data.humidity
         cloudness = self.weather_data.cloudness
         condition = self.weather_data.condition
+        time = self.weather_data.observation_time
 
-        weather = f'''Now: {temperature} °C,\nfeels like {feel_temperature} °C,\nhumidity: {humidity},\ncloudness: {cloudness},\ncondition: {condition}'''
+        weather = f'''Time: {time}\nNow: {temperature} °C\nfeels like {feel_temperature} °C\nhumidity: {humidity}\ncloudness: {cloudness}\ncondition: {condition}'''
         
         self.Text.setText(weather)
     

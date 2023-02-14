@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="buttons">
+    <file>icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/close.svg</file>
+    <file>icons/hide.svg</file>
+    <file>icons/location_searching_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/remove_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/travel_explore_FILL0_wght400_GRAD0_opsz48.svg</file>
+  </qresource>
+</RCC>

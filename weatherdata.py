@@ -1,19 +1,36 @@
 from yaweather import YaWeather, cities
 from typing import Tuple
+import pytz
+import datetime
+from timezonefinder import TimezoneFinder
+import requests
 
 class WeatherData(YaWeather):
-    def __init__(self, country, city):
+    def __init__(self, coordinates):
         ywm = YaWeather(api_key='69837bd5-2216-4f9d-b4bf-1d4ff578de56')
         
-        coordinates = self.get_coordinates_city(country, city)
-                
-        self.forecast = ywm.forecast(coordinates)
-    
+        self.coordinates = coordinates
+        
+        try:
+            self.forecast = ywm.forecast(self.coordinates)
+        except requests.exceptions.ReadTimeout:
+            pass
+
     @classmethod
-    def get_coordinates_city(self, country, city) -> Tuple[float, float]:
+    def get_coordinates_city(self, country, city) -> tuple[float, float]:
         country_class = getattr(cities, country, None)
-        return country_class.cities()[city]
-    
+        city_coord = country_class.cities().get(city)
+        if not city_coord:
+            return None
+        return city_coord
+
+    @property
+    def observation_time(self):
+        tf = TimezoneFinder(in_memory=True)
+        timezone = tf.timezone_at(lat=self.coordinates[0], lng=self.coordinates[1])
+        now = datetime.datetime.now(pytz.timezone(timezone))
+        return now.strftime("%H:%M")
+
     @property
     def temperature(self):
         return self.forecast.fact.temp
@@ -53,10 +70,6 @@ class WeatherData(YaWeather):
     @property
     def icon(self):
         return self.forecast.fact.icon
-
-    @property
-    def observation_time(self):
-        return self.forecast.fact.observation_time
 
     @property
     def precipitation_type(self):
