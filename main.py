@@ -1,91 +1,67 @@
 import sys
 
 # my files
-from path import interface, rc
 from location import Location
-from weatherdata import WeatherData
+from translate import Translate
+from weatherDataWAPI import WeatherDataWAPI
 
 # pyqt6
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtCore, uic
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication
 
-class createGUI(QtWidgets.QMainWindow, interface.Ui_MainWindow):
+
+class createGUI(QtWidgets.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi('path/interface.ui', self)
         self.initGUI()
 
     def initGUI(self):
         # window options
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
-        self.setFixedSize(600, 605)
 
         # minimazed and close buttons
-        self.close_button.clicked.connect(QtWidgets.QApplication.instance().quit)
-        self.hide_button.clicked.connect(self.to_tray)
-        
+        self.close.clicked.connect(QtWidgets.QApplication.instance().quit)
+        self.hide.clicked.connect(self.toggle_tray)
+
         # tray
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
-        self.tray_icon.activated.connect(self.from_tray)
-        
-        # searching 
-        self.searchbutton.clicked.connect(self.location_search_text)
-        self.searchMe.clicked.connect(self.location_me)
+        self.tray_icon.activated.connect(self.toggle_tray)
 
-    def location_search_text(self):
-        search_string = self.searchtext.text().strip()
-        if not search_string:
-            self.Text.setText("Empty")
-            return
-                
-        coordinates, country_city = Location.get_info_city(city_and_country=search_string)
+        # searching
+        self.clear.clicked.connect(lambda: self.searchEdit.clear())
+        self.search.clicked.connect(lambda: self.display_location(Location.get_coor_city(self.searchEdit.toPlainText().strip()))
+                                    if self.searchEdit.toPlainText().strip() else self.text.setText("Empty"))
+        self.search_location.clicked.connect(lambda: self.display_location(Location.get_location_by_ip()))
 
-        if coordinates is None:
-            self.Text.setText("City not found")
-        else:
-            self.display_location(coordinates)
+    def display_location(self, coordinates: tuple[float, float]) -> None:
+        weather_data = WeatherDataWAPI(coordinates, 'ru')
+        translator = Translate(Location.observation_time(coordinates), weather_data)
 
-        
-    def location_me(self):
-        coordinates, country_city = Location.get_location_by_ip()
+        for name, value in translator.get_translation().items():
+            if value is not None:
+                widget = getattr(self, name)
+                widget.setText(str(value))
 
-        self.display_location(coordinates)
-        
-    def display_location(self, coordinates):
-        print(coordinates)
-
-        self.weather_data = WeatherData(coordinates)
-        
-        temperature = self.weather_data.temperature
-        feel_temperature = self.weather_data.feel_temperature
-        humidity = self.weather_data.humidity
-        cloudness = self.weather_data.cloudness
-        condition = self.weather_data.condition
-        time = self.weather_data.observation_time
-
-        weather = f'''Time: {time}\nNow: {temperature} °C\nfeels like {feel_temperature} °C\nhumidity: {humidity}\ncloudness: {cloudness}\ncondition: {condition}'''
-        
-        self.Text.setText(weather)
-    
-    def set_bottom_right(self):
+    def set_bottom_right(self) -> None:
         screen_size = QApplication.primaryScreen().geometry()
         app_size = QWidget.size(self)
         screen_without_toolbar_size = QApplication.primaryScreen().availableGeometry()
         self.move(screen_size.width()-app_size.width(),
                   (screen_size.height() - app_size.height()) - (screen_size.height() - screen_without_toolbar_size.height()))
-    
-    def to_tray(self):
-        self.setVisible(False)
-        self.tray_icon.show()
 
-    def from_tray(self):
-        self.setVisible(True)
-        self.tray_icon.hide()
-        
+    def toggle_tray(self) -> None:
+        if self.isVisible():
+            self.setVisible(False)
+            self.tray_icon.show()
+        else:
+            self.setVisible(True)
+            self.tray_icon.hide()
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = createGUI()
