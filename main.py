@@ -3,7 +3,7 @@ import sys
 # my files
 from location import Location
 from translate import Translate
-from weatherDataWAPI import WeatherDataWAPI
+from weatherDataWAPI import WeatherData
 
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
@@ -39,13 +39,18 @@ class createGUI(QtWidgets.QMainWindow):
         self.search_location.clicked.connect(lambda: self.display_location(Location.get_location_by_ip()))
 
     def display_location(self, coordinates: tuple[float, float]) -> None:
-        weather_data = WeatherDataWAPI(coordinates, 'ru')
-        translator = Translate(Location.observation_time(coordinates), weather_data)
+        weather_data = WeatherData(coordinates, 'ru')
 
-        for name, value in translator.get_translation().items():
-            if value is not None:
-                widget = getattr(self, name)
-                widget.setText(str(value))
+        if isinstance(weather_data.get_all_data(), dict):
+            translator = Translate(weather_data)
+            for name, value in translator.get_translation().items():
+                if value is not None:
+                    widget = getattr(self, name)
+                    widget.setText(str(value))
+            
+        else:
+            return ValueError(translator)
+        
 
     def set_bottom_right(self) -> None:
         screen_size = QApplication.primaryScreen().geometry()
