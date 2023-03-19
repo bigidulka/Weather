@@ -1,1 +1,1 @@
-This is Weather App create by using YaWeather API, PyQt6 and other lib
+This is Weather App create by using Weather API, PyQt6 and other lib
