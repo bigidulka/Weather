@@ -16,30 +16,30 @@ class WeatherData:
         return data
 
     def get_current_weather(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_current_weather(), WeatherDataParser.parse_current_weather)
-
-    def get_hourly_forecast(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_hourly_forecast(), WeatherDataParser.parse_hourly_forecast)
+        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_current_weather)
 
     def get_daily_forecast(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_daily_forecast(), WeatherDataParser.parse_daily_forecast)
+        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_daily_forecast)
+
+    def get_hourly_forecast(self) -> Union[dict, Tuple[str, int]]:
+        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_hourly_weather_for_date)
 
     def get_all_data(self) -> Union[dict, str, Tuple[str, int]]:
         current_weather = self.get_current_weather()
-        hourly_forecast = self.get_hourly_forecast()
         daily_forecast = self.get_daily_forecast()
+        # hourly_forecast = self.get_hourly_forecast()
 
         if isinstance(current_weather, str):
             return current_weather
-        elif isinstance(hourly_forecast, str):
-            return hourly_forecast
         elif isinstance(daily_forecast, str):
             return daily_forecast
+        # elif isinstance(hourly_forecast, str):
+        #     return hourly_forecast
 
         return {
             'current_weather': current_weather,
-            'hourly_forecast': hourly_forecast,
             'daily_forecast': daily_forecast,
+            # 'hourly_forecast': hourly_forecast,
         }
 
 
@@ -53,25 +53,14 @@ class WeatherDataFetcher:
         return {'lang': self.language, 'q': f'{self.coordinates[0]}, {self.coordinates[1]}'}
 
     @lru_cache(maxsize=128)
-    def __get_weather_data(self, url: str) -> Union[dict, Tuple[str, int]]:
+    def get_weather_data(self) -> Union[dict, Tuple[str, int]]:
+        url = f'http://api.weatherapi.com/v1/forecast.json?key={self.__api_key}&units=metric&days=14'
         try:
             response = requests.get(url, params=self.__get_params())
             response.raise_for_status()
             return response.json()
         except requests.exceptions.HTTPError as error:
             return (f'HTTP error occurred: {error}', error.response.status_code)
-
-    def get_current_weather(self) -> Union[dict, Tuple[str, int]]:
-        url = f'http://api.weatherapi.com/v1/current.json?key={self.__api_key}&units=metric'
-        return self.__get_weather_data(url)
-
-    def get_hourly_forecast(self) -> Union[dict, Tuple[str, int]]:
-        url = f'http://api.weatherapi.com/v1/forecast.json?key={self.__api_key}&units=metric&forecast_days=1'
-        return self.__get_weather_data(url)
-
-    def get_daily_forecast(self) -> Union[dict, Tuple[str, int]]:
-        url = f'http://api.weatherapi.com/v1/forecast.json?key={self.__api_key}&units=metric&days=14'
-        return self.__get_weather_data(url)
 
 
 class WeatherDataParser:
@@ -118,26 +107,24 @@ class WeatherDataParser:
         return forecasts
 
     @staticmethod
-    def parse_hourly_weather_for_date(data: dict, date_str: str) -> list:
+    def parse_hourly_weather_for_date(data: dict) -> dict:
         hourly_data = data['forecast']['forecastday'][0]['hour']
-        result = []
+        result = {}
         for hour_data in hourly_data:
-            if hour_data['time'][:10] == date_str:
-                result.append({
-                    'time': hour_data['time'],
-                    'temp_c': hour_data['temp_c'],
-                    'condition:text': hour_data['condition']['text'],
-                    'condition:icon': hour_data['condition']['icon'],
-                    'wind_kph': hour_data['wind_kph'],
-                    'wind_dir': hour_data['wind_dir'],
-                    'pressure_mb': hour_data['pressure_mb'],
-                    'precip_mm': hour_data['precip_mm'],
-                    'humidity': hour_data['humidity'],
-                    'cloud': hour_data['cloud'],
-                    'is_day': hour_data['is_day'],
-                })
+            date = hour_data['time'][:10]
+            if date not in result:
+                result[date] = []
+            result[date].append({
+                'time': hour_data['time'],
+                'temp_c': hour_data['temp_c'],
+                'condition:text': hour_data['condition']['text'],
+                'condition:icon': hour_data['condition']['icon'],
+                'wind_kph': hour_data['wind_kph'],
+                'wind_dir': hour_data['wind_dir'],
+                'pressure_mb': hour_data['pressure_mb'],
+                'precip_mm': hour_data['precip_mm'],
+                'humidity': hour_data['humidity'],
+                'cloud': hour_data['cloud'],
+                'is_day': hour_data['is_day'],
+            })
         return result
-
-
-weather_data = WeatherData((48.8566, 2.3522), 'ru')
-weather_data.get_all_data()

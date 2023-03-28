@@ -8,7 +8,7 @@ from weatherDataWAPI import WeatherData
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget
+from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication
 
 
@@ -40,16 +40,32 @@ class createGUI(QtWidgets.QMainWindow):
 
     def display_location(self, coordinates: tuple[float, float]) -> None:
         weather_data = WeatherData(coordinates, 'ru')
+        
+        data_dict = weather_data.get_all_data()
+        
+        if isinstance(data_dict, str):
+            return ValueError()
 
-        if isinstance(weather_data.get_all_data(), dict):
+        else:
             translator = Translate(weather_data)
-            for name, value in translator.get_translation().items():
+            for name, value in translator.get_current_translation().items():
                 if value is not None:
                     widget = getattr(self, name)
                     widget.setText(str(value))
+        
+        forecasts = Translate.parse_daily_forecast(data_dict.get('daily_forecast', {}))
+        
+        layout = QVBoxLayout()
+        container = QWidget()
+        container.setLayout(layout)
+
+        # Add the QFrames to the QVBoxLayout
+        for forecast in forecasts:
+            layout.addWidget(forecast)
+
+        # Set the QWidget as the central widget of the QScrollArea
+        self.scroll_area.setWidget(container)
             
-        else:
-            return ValueError(translator)
         
 
     def set_bottom_right(self) -> None:

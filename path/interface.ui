@@ -169,7 +169,8 @@ border: 2px solid transparent;
        <item>
         <widget class="QWidget" name="main" native="true">
          <property name="styleSheet">
-          <string notr="true">#advInfo, #basicInfo {
+          <string notr="true">
+#basicInfo, #forecast, #hourly_forecast {
   color: #333;
   background-color: rgb(249, 249, 249);
   border-radius: 5px;
@@ -197,9 +198,9 @@ border: 2px solid transparent;
             <property name="styleSheet">
              <string notr="true"/>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <layout class="QVBoxLayout" name="verticalLayout_7">
              <property name="spacing">
-              <number>6</number>
+              <number>0</number>
              </property>
              <property name="leftMargin">
               <number>0</number>
@@ -339,62 +340,47 @@ border: 2px solid transparent;
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QWidget" name="hours" native="true"/>
-                </item>
                </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QFrame" name="advInfo">
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_5"/>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="days" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">#parts {
-  color: #333;
-  background-color: rgb(249, 249, 249);
-  border-radius: 5px;
-  padding: 5px
-}</string>
-            </property>
-            <widget class="QLabel" name="text">
+           <widget class="QWidget" name="forecast" native="true">
+            <widget class="QScrollArea" name="scrollArea">
              <property name="geometry">
               <rect>
-               <x>260</x>
-               <y>60</y>
-               <width>55</width>
-               <height>16</height>
+               <x>30</x>
+               <y>20</y>
+               <width>411</width>
+               <height>111</height>
               </rect>
              </property>
-             <property name="text">
-              <string>TextLabel</string>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>409</width>
+                <height>109</height>
+               </rect>
+              </property>
+             </widget>
             </widget>
            </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="hourly_forecast" native="true"/>
           </item>
          </layout>
         </widget>
