@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>518</width>
-    <height>611</height>
+    <width>437</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -169,13 +169,32 @@ border: 2px solid transparent;
        <item>
         <widget class="QWidget" name="main" native="true">
          <property name="styleSheet">
-          <string notr="true">
-#basicInfo, #forecast, #hourly_forecast {
+          <string notr="true">#today, #hourly_forecast, #daily_forecast {
   color: #333;
   background-color: rgb(249, 249, 249);
   border-radius: 5px;
   padding: 5px
-}</string>
+}
+
+QScrollArea {
+                background-color: #ffffff;
+                border: none;
+}
+
+#daily_scrollAreaCont, #hourly_scrollAreaCont {
+background-color: rgb(249, 249, 249);
+}
+
+QScrollArea QFrame {
+    background-color: rgba(255, 255, 255, 0.0);
+}
+
+QScrollArea QFrame:hover {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+
+</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
@@ -347,46 +366,148 @@ border: 2px solid transparent;
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="forecast" native="true">
-            <widget class="QScrollArea" name="scrollArea">
-             <property name="geometry">
-              <rect>
-               <x>30</x>
-               <y>20</y>
-               <width>411</width>
-               <height>111</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>409</width>
-                <height>109</height>
-               </rect>
-              </property>
-             </widget>
-            </widget>
+           <widget class="QWidget" name="daily_forecast" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QLabel" name="prognoz14">
+               <property name="text">
+                <string>Прогноз на 14 дней</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QScrollArea" name="daily_scrollArea">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="verticalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="daily_scrollAreaCont">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>399</width>
+                  <height>90</height>
+                 </rect>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="buttons_dfor">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="pushButton_2">
+                 <property name="text">
+                  <string>&lt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton">
+                 <property name="text">
+                  <string>&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="hourly_forecast" native="true"/>
+           <widget class="QWidget" name="hourly_forecast" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QLabel" name="prognozDn">
+               <property name="text">
+                <string>Прогноз дня</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QScrollArea" name="hourly_scrollArea">
+               <property name="verticalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="hourly_scrollAreaCont">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>399</width>
+                  <height>89</height>
+                 </rect>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="buttons_hfor">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="pushButton_4">
+                 <property name="text">
+                  <string>&lt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_3">
+                 <property name="text">
+                  <string>&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame">
+        <widget class="QFrame" name="searhPanel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -401,7 +522,7 @@ border: 2px solid transparent;
          </property>
          <property name="styleSheet">
           <string notr="true">/* Стиль для элемента с классом &quot;example&quot; */
-#frame {
+#searhPanel {
 
   color: #333;
   background-color: rgb(249, 249, 249);
@@ -410,7 +531,7 @@ border: 2px solid transparent;
 }
 
 /* Стиль для элемента с классом &quot;example&quot; при наведении мыши на него */
-#frame:hover {
+#searhPanel:hover {
   background-color: rgba(200, 200, 200, 0.3);
   border: 1px solid #aaa;
 }

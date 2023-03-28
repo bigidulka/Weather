@@ -1,66 +1,41 @@
 import requests
 from typing import Union, Tuple
-from functools import lru_cache
-import time
+from collections import namedtuple
+
+WeatherDataResult = namedtuple('WeatherDataResult', ['data', 'status_code'])
 
 
 class WeatherData:
+    API_KEY = '487da948423c4322b24221408231703'
+
     def __init__(self, coordinates: tuple, language: str) -> None:
         self.coordinates = coordinates
         self.language = language
 
-    def __get_weather_data(self, fetcher_method, parser_method) -> Union[dict, Tuple[str, int]]:
-        data = fetcher_method()
-        if isinstance(data, dict):
-            return parser_method(data)
+    def __req_get_weather_data(self) -> WeatherDataResult:
+        url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q={self.coordinates[0]},{self.coordinates[1]}'
+        try:
+            with requests.Session() as session:
+                response = session.get(url)
+                response.raise_for_status()
+                return WeatherDataResult(data=response.json(), status_code=response.status_code)
+        except requests.exceptions.HTTPError as error:
+            return WeatherDataResult(data=f'HTTP error occurred: {error}', status_code=error.response.status_code)
+
+    def __get_weather_data(self, parser_method) -> Union[dict, Tuple[str, int]]:
+        data = self.__req_get_weather_data()
+        if isinstance(data.data, dict):
+            return parser_method(data.data)
         return data
 
     def get_current_weather(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_current_weather)
+        return self.__get_weather_data(WeatherDataParser.parse_current_weather)
 
     def get_daily_forecast(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_daily_forecast)
+        return self.__get_weather_data(WeatherDataParser.parse_daily_forecast)
 
-    def get_hourly_forecast(self) -> Union[dict, Tuple[str, int]]:
-        return self.__get_weather_data(lambda: WeatherDataFetcher(self.coordinates, self.language).get_weather_data(), WeatherDataParser.parse_hourly_weather_for_date)
-
-    def get_all_data(self) -> Union[dict, str, Tuple[str, int]]:
-        current_weather = self.get_current_weather()
-        daily_forecast = self.get_daily_forecast()
-        # hourly_forecast = self.get_hourly_forecast()
-
-        if isinstance(current_weather, str):
-            return current_weather
-        elif isinstance(daily_forecast, str):
-            return daily_forecast
-        # elif isinstance(hourly_forecast, str):
-        #     return hourly_forecast
-
-        return {
-            'current_weather': current_weather,
-            'daily_forecast': daily_forecast,
-            # 'hourly_forecast': hourly_forecast,
-        }
-
-
-class WeatherDataFetcher:
-    def __init__(self, coordinates: tuple, language: str) -> None:
-        self.coordinates = coordinates
-        self.language = language
-        self.__api_key = '487da948423c4322b24221408231703'
-
-    def __get_params(self) -> dict:
-        return {'lang': self.language, 'q': f'{self.coordinates[0]}, {self.coordinates[1]}'}
-
-    @lru_cache(maxsize=128)
-    def get_weather_data(self) -> Union[dict, Tuple[str, int]]:
-        url = f'http://api.weatherapi.com/v1/forecast.json?key={self.__api_key}&units=metric&days=14'
-        try:
-            response = requests.get(url, params=self.__get_params())
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.HTTPError as error:
-            return (f'HTTP error occurred: {error}', error.response.status_code)
+    def get_hourly_forecast(self, date: str) -> Union[dict, Tuple[str, int]]:
+        return self.__get_weather_data(WeatherDataParser.parse_hourly_forecast, date)
 
 
 class WeatherDataParser:
@@ -107,24 +82,25 @@ class WeatherDataParser:
         return forecasts
 
     @staticmethod
-    def parse_hourly_weather_for_date(data: dict) -> dict:
+    def parse_hourly_forecast(data: dict, date_str: str) -> list:
         hourly_data = data['forecast']['forecastday'][0]['hour']
-        result = {}
+        result = []
         for hour_data in hourly_data:
-            date = hour_data['time'][:10]
-            if date not in result:
-                result[date] = []
-            result[date].append({
-                'time': hour_data['time'],
-                'temp_c': hour_data['temp_c'],
-                'condition:text': hour_data['condition']['text'],
-                'condition:icon': hour_data['condition']['icon'],
-                'wind_kph': hour_data['wind_kph'],
-                'wind_dir': hour_data['wind_dir'],
-                'pressure_mb': hour_data['pressure_mb'],
-                'precip_mm': hour_data['precip_mm'],
-                'humidity': hour_data['humidity'],
-                'cloud': hour_data['cloud'],
-                'is_day': hour_data['is_day'],
-            })
+            if hour_data['time'][:10] == date_str:
+                result.append({
+                    'time': hour_data['time'],
+                    'temp_c': hour_data['temp_c'],
+                    'condition:text': hour_data['condition']['text'],
+                    'condition:icon': hour_data['condition']['icon'],
+                    'wind_kph': hour_data['wind_kph'],
+                    'wind_dir': hour_data['wind_dir'],
+                    'pressure_mb': hour_data['pressure_mb'],
+                    'precip_mm': hour_data['precip_mm'],
+                    'humidity': hour_data['humidity'],
+                    'cloud': hour_data['cloud'],
+                    'is_day': hour_data['is_day'],
+                })
         return result
+
+data = WeatherData((55.755825, 37.617298), 'ru')
+print(data.get_hourly_forecast('2023-04-01'))
