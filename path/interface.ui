@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
-    <height>523</height>
+    <width>512</width>
+    <height>582</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@ border: 2px solid transparent;
           </size>
          </property>
          <property name="text">
-          <string>location</string>
+          <string>Loc</string>
          </property>
         </widget>
        </item>
@@ -131,7 +131,7 @@ border: 2px solid transparent;
           </size>
          </property>
          <property name="text">
-          <string>hide</string>
+          <string>---</string>
          </property>
         </widget>
        </item>
@@ -150,7 +150,7 @@ border: 2px solid transparent;
           </size>
          </property>
          <property name="text">
-          <string>close</string>
+          <string>xxx</string>
          </property>
         </widget>
        </item>
@@ -189,9 +189,6 @@ QScrollArea QFrame {
     background-color: rgba(255, 255, 255, 0.0);
 }
 
-QScrollArea QFrame:hover {
-    background-color: rgba(200, 200, 200, 0.3);
-}
 
 
 </string>
@@ -368,6 +365,18 @@ QScrollArea QFrame:hover {
           <item>
            <widget class="QWidget" name="daily_forecast" native="true">
             <layout class="QVBoxLayout" name="verticalLayout_8">
+             <property name="leftMargin">
+              <number>9</number>
+             </property>
+             <property name="topMargin">
+              <number>9</number>
+             </property>
+             <property name="rightMargin">
+              <number>9</number>
+             </property>
+             <property name="bottomMargin">
+              <number>3</number>
+             </property>
              <item>
               <widget class="QLabel" name="prognoz14">
                <property name="text">
@@ -400,8 +409,8 @@ QScrollArea QFrame:hover {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>399</width>
-                  <height>90</height>
+                  <width>474</width>
+                  <height>125</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -422,14 +431,26 @@ QScrollArea QFrame:hover {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPushButton" name="pushButton_2">
+                <widget class="QPushButton" name="previousd">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>&lt;</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="nextd">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>&gt;</string>
                  </property>
@@ -443,10 +464,13 @@ QScrollArea QFrame:hover {
           <item>
            <widget class="QWidget" name="hourly_forecast" native="true">
             <layout class="QVBoxLayout" name="verticalLayout_9">
+             <property name="bottomMargin">
+              <number>3</number>
+             </property>
              <item>
               <widget class="QLabel" name="prognozDn">
                <property name="text">
-                <string>Прогноз дня</string>
+                <string>Почасовой прогноз</string>
                </property>
               </widget>
              </item>
@@ -469,8 +493,8 @@ QScrollArea QFrame:hover {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>399</width>
-                  <height>89</height>
+                  <width>474</width>
+                  <height>125</height>
                  </rect>
                 </property>
                 <property name="styleSheet">
@@ -485,14 +509,14 @@ QScrollArea QFrame:hover {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPushButton" name="pushButton_4">
+                <widget class="QPushButton" name="previoush">
                  <property name="text">
                   <string>&lt;</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_3">
+                <widget class="QPushButton" name="nexth">
                  <property name="text">
                   <string>&gt;</string>
                  </property>
