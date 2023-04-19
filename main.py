@@ -7,7 +7,7 @@ from weatherDataWAPI import WeatherData
 
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt, QEvent, QResource
 from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication
 
@@ -15,6 +15,7 @@ from PyQt6.QtGui import QIcon, QAction, QGuiApplication
 class createGUI(QtWidgets.QMainWindow):
     def __init__(self) -> None:
         super().__init__()
+        QtCore.QResource.registerResource('path/res.qrc')
         uic.loadUi('path/interface.ui', self)
         self.initGUI()
 
@@ -43,33 +44,18 @@ class createGUI(QtWidgets.QMainWindow):
     def on_daily_forecast_button_clicked(self, date_str):
         hourly_forecast_fr = self.translator.parse_hourly_forecast(date_str)
 
-        # Clear the existing layout
         layout = self.hourly_scrollAreaCont.layout()
         if layout is not None:
             QWidget().setLayout(layout)
 
-        # Create a new layout and add widgets to it
         layout = QHBoxLayout(self.hourly_scrollAreaCont)
         for fr_date, fr in hourly_forecast_fr.items():
             layout.addWidget(fr)
 
-        # Set the height of the scroll area
-        item_height = layout.itemAt(0).widget().height()
-
-        print(item_height)
-        
-        # Connect the scroll buttons to the scroll functions
-        self.nexth.clicked.connect(lambda: self.qsmove_right(self.hourly_scrollArea, item_height))
-        self.previoush.clicked.connect(lambda: self.qsmove_left(self.hourly_scrollArea, item_height))
-
-    def qsmove_left(self, scr, item_height):
-        scr.horizontalScrollBar().setValue(scr.horizontalScrollBar().value() - item_height)
-
-    def qsmove_right(self, scr, item_height):
-        scr.horizontalScrollBar().setValue(scr.horizontalScrollBar().value() + item_height) 
-
     def daily_forecast_scr(self):
         daily_forecast_but = self.translator.parse_daily_forecast()
+        
+        self.prognoz14.setText(f'Прогноз на {len(daily_forecast_but.keys())} дней')
 
         for but_date, but in daily_forecast_but.items():
             but.clicked.connect(
@@ -82,11 +68,6 @@ class createGUI(QtWidgets.QMainWindow):
         layout = QHBoxLayout(self.daily_scrollAreaCont)
         for but_date, but in daily_forecast_but.items():
             layout.addWidget(but)
-
-        self.nextd.clicked.connect(
-            lambda: self.qsmove_right(self.daily_scrollArea))
-        self.previousd.clicked.connect(
-            lambda: self.qsmove_left(self.daily_scrollArea))
 
     def display_location(self, coordinates: tuple[float, float]) -> None:
         weatherData = WeatherData(coordinates, 'ru')

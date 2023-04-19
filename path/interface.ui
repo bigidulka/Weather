@@ -6,29 +6,105 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>582</height>
+    <width>468</width>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton {
+   <string notr="true">#title {
+background-color: rgb(249, 249, 249);
+  border-radius: 0px;
+}
+
+QPushButton {
 background-color: transparent;
 border: 2px solid transparent;
+  border-radius: 5px;
+}
+
+#centralWidget {
+  border-radius: 5px;
+}
+
+QFrame {
+  border-radius: 5px;
 }
 
 QPushButton:hover {
 background-color: rgba(200, 200, 200, 0.3);
 border: 2px solid transparent;
-  border-radius: 5px;
 }
 
 QPushButton:pressed {
 background-color: rgba(200, 200, 200, 0.5);
 border: 2px solid transparent;
 }
+
+#today, #hourly_forecast, #daily_forecast {
+  border-radius: 5px;
+  color: #333;
+  background-color: rgb(249, 249, 249);
+  padding: 5px
+
+}
+
+QScrollArea {
+                background-color: #ffffff;
+                border: none;
+  border-radius: 5px;
+}
+
+#daily_scrollAreaCont, #hourly_scrollAreaCont {
+background-color: rgb(249, 249, 249);
+}
+
+QScrollArea QFrame {
+    background-color: rgba(255, 255, 255, 0.0);
+}
+
+QScrollBar:horizontal {
+    background-color: rgb(249, 249, 249);
+    height: 10px;
+}
+
+QScrollBar {
+    background-color: transparent;
+}
+
+QScrollBar::handle {
+    background-color: rgba(200, 200, 200, 0.3);
+    border-radius: 5px;
+}
+
+QScrollBar::handle:hover, QScrollBar::handle:pressed {
+    background-color: rgba(200, 200, 200, 0.5);
+}
+
+QScrollBar::add-page, QScrollBar::sub-page {
+    background-color: transparent;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    background-color: transparent;
+    width: 0px;
+    height: 0px;
+}
+
+QScrollBar::add-line:horizontal {
+    border-right: 1px solid #333333;
+}
+
+QScrollBar::sub-line:horizontal {
+    border-left: 1px solid #333333;
+}
+
+QScrollBar::handle:horizontal {
+    min-width: 20px;
+}
+
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -94,12 +170,16 @@ border: 2px solid transparent;
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>40</height>
           </size>
          </property>
          <property name="text">
-          <string>Loc</string>
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icon/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
@@ -126,12 +206,16 @@ border: 2px solid transparent;
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>40</height>
           </size>
          </property>
          <property name="text">
-          <string>---</string>
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icon/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
@@ -145,12 +229,16 @@ border: 2px solid transparent;
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>40</height>
           </size>
          </property>
          <property name="text">
-          <string>xxx</string>
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
@@ -166,32 +254,22 @@ border: 2px solid transparent;
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>4</number>
+       </property>
        <item>
         <widget class="QWidget" name="main" native="true">
          <property name="styleSheet">
-          <string notr="true">#today, #hourly_forecast, #daily_forecast {
-  color: #333;
-  background-color: rgb(249, 249, 249);
-  border-radius: 5px;
-  padding: 5px
-}
-
-QScrollArea {
-                background-color: #ffffff;
-                border: none;
-}
-
-#daily_scrollAreaCont, #hourly_scrollAreaCont {
-background-color: rgb(249, 249, 249);
-}
-
-QScrollArea QFrame {
-    background-color: rgba(255, 255, 255, 0.0);
-}
-
-
-
-</string>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
@@ -396,7 +474,7 @@ QScrollArea QFrame {
                 <enum>Qt::ScrollBarAlwaysOff</enum>
                </property>
                <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
+                <enum>Qt::ScrollBarAlwaysOn</enum>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -409,8 +487,8 @@ QScrollArea QFrame {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>474</width>
-                  <height>125</height>
+                  <width>442</width>
+                  <height>130</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -424,39 +502,6 @@ QScrollArea QFrame {
                 </property>
                </widget>
               </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="buttons_dfor">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="previousd">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>&lt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="nextd">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>&gt;</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </item>
             </layout>
            </widget>
@@ -480,7 +525,7 @@ QScrollArea QFrame {
                 <enum>Qt::ScrollBarAlwaysOff</enum>
                </property>
                <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
+                <enum>Qt::ScrollBarAlwaysOn</enum>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -493,8 +538,8 @@ QScrollArea QFrame {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>474</width>
-                  <height>125</height>
+                  <width>442</width>
+                  <height>130</height>
                  </rect>
                 </property>
                 <property name="styleSheet">
@@ -502,27 +547,6 @@ QScrollArea QFrame {
                 </property>
                </widget>
               </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="buttons_hfor">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="previoush">
-                 <property name="text">
-                  <string>&lt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="nexth">
-                 <property name="text">
-                  <string>&gt;</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </item>
             </layout>
            </widget>
@@ -613,8 +637,18 @@ QTextEdit {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
             <property name="text">
-             <string>clear</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
             </property>
            </widget>
           </item>
@@ -626,8 +660,18 @@ QTextEdit {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
             <property name="text">
-             <string>search</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="res.qrc">
+              <normaloff>:/icon/icons/search_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/search_FILL0_wght400_GRAD0_opsz48.svg</iconset>
             </property>
            </widget>
           </item>
@@ -640,6 +684,8 @@ QTextEdit {
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

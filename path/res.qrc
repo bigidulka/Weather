@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/close_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/remove_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/search_FILL0_wght400_GRAD0_opsz48.svg</file>
+  </qresource>
+</RCC>

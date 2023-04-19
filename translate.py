@@ -82,8 +82,7 @@ class Translate:
             layout.addWidget(time_label)
 
             icon_label = QLabel()
-            icon_label.setPixmap(icon_pixmap.scaled(
-                30, 30, Qt.AspectRatioMode.KeepAspectRatio))
+            icon_label.setPixmap(icon_pixmap.scaled(icon_pixmap.width(), 50, Qt.AspectRatioMode.KeepAspectRatio))
             icon_label.setAlignment(
                 Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
             layout.addWidget(icon_label)
