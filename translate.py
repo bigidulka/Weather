@@ -1,8 +1,11 @@
 from weatherDataWAPI import WeatherData
 from location import Location
 from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt, QByteArray
+from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtCore import Qt, QByteArray, QSize
+import datetime
+import calendar
+
 
 class Translate:
     def __init__(self, data_dict: WeatherData) -> None:
@@ -12,115 +15,131 @@ class Translate:
 
     @staticmethod
     def translation_from_the_front(language):
-        if language == 'en':
-            return {"search_placeholder": "Search",
+        translations = {
+                'en': {"search_placeholder": "Search",
                     "forecast_several_days": "Forecast for several days",
                     "hourly_forecast": "Hourly forecast",
                     "not_found": "Not found",
-                    "search_empty": "Search Empty"}
-        elif language == 'ru':
-            return {"search_placeholder": "Поиск",
+                    "search_empty": "Search Empty"},
+                'ru': {"search_placeholder": "Поиск",
                     "forecast_several_days": "Прогноз на несколько дней",
                     "hourly_forecast": "Почасовой прогноз",
                     "not_found": "Не найдено",
                     "search_empty": "Строка пустая"}
-        else:
-            raise ValueError(f"Unsupported language: {language}")
+            }
+        return translations[language]
 
     def get_current_translation(self):
         current_weather = self.data_dict.parse_current_weather()
         result = Location.get_name_time(self.coordinates, self.language)
-        city_name, country_name = result["city"], result["country"]
-        time_only = result["local_time"].strftime("%H:%M")
+        city_name = result["city"]
+        country_name = result["country"]
+        self.time_only = result["local_time"].strftime("%H:%M")
 
-        if self.language == 'en':
-            translation = {
-                'nameCityCountry': f"{city_name}, {country_name}" if city_name is not None else f"{country_name}",
-                'time': f"It is now {time_only}. Yesterday at this time {0}",
-                'temp': current_weather.get('temp_c', ''),
+        translations = {
+            'en': {
+                'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
+                'time': f"It is now {self.time_only}. Yesterday at this time {0}",
+                'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
                 'condition': current_weather.get('condition:text', ''),
-                'feels_like': f"Feels like {current_weather.get('feelslike_c', '')}"
-            }
-        elif self.language == 'ru':
-            translation = {
-                'nameCityCountry': f"{city_name}, {country_name}" if city_name is not None else f"{country_name}",
-                'time': f"Сейчас {time_only}. Вчера в это время {0}",
-                'temp': current_weather.get('temp_c', ''),
+                'feels_like': f"Feels like {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
+                'windText': f"{current_weather.get('wind_kph', '')} m/s, {current_weather.get('wind_dir', '')}",
+                'humText': f"{current_weather.get('humidity', '')}%",
+                'pressText': f"{current_weather.get('pressure_mb', '')}mmHg Art."
+            },
+            'ru': {
+                'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
+                'time': f"Сейчас {self.time_only}. Вчера в это время {0}",
+                'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
                 'condition': current_weather.get('condition:text', ''),
-                'feels_like': f"Ощущается как {current_weather.get('feelslike_c', '')}"
+                'feels_like': f"Ощущается как {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
+                'windText': f"{current_weather.get('wind_kph', '')}м/c, {current_weather.get('wind_dir', '')}",
+                'humText': f"{current_weather.get('humidity', '')}%",
+                'pressText': f"{current_weather.get('pressure_mb', '')} мм рт. ст."
             }
-        else:
-            raise ValueError(f"Unsupported language: {self.language}")
-        return translation
-
-    from PyQt5.QtWidgets import QFrame
+        }
+        return translations[self.language]
 
     def parse_daily_forecast(self) -> dict:
-        daily_forecast = self.data_dict.parse_daily_forecast()
+        weekdays = {
+            'Monday': {'en': 'Mon', 'ru': 'Пн'},
+            'Tuesday': {'en': 'Tue', 'ru': 'Вт'},
+            'Wednesday': {'en': 'Wed', 'ru': 'Ср'},
+            'Thursday': {'en': 'Thu', 'ru': 'Чт'},
+            'Friday': {'en': 'Fri', 'ru': 'Пт'},
+            'Saturday': {'en': 'Sat', 'ru': 'Сб'},
+            'Sunday': {'en': 'Sun', 'ru': 'Вс'}
+        }
+        months = {
+            'en': dict(zip(range(1, 13), calendar.month_abbr[1:])),
+            'ru': dict(zip(range(1, 13), ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']))
+        }
+
+        self.daily_forecast = self.data_dict.parse_daily_forecast()
         forecast_buttons = {}
-        for forecast_data in daily_forecast:
-            button = QPushButton()
-            button.setObjectName("daily_button")
-            button.setFlat(True)
-
-            layout = QVBoxLayout()
-            button.setLayout(layout)
-
-            frame = QFrame()
-            frame.setMinimumHeight(150)
-            frame.setObjectName("daily_frame")
-            frame_layout = QVBoxLayout()
-            frame.setLayout(frame_layout)
-
-            icon_label = QLabel()  # добавить QLabel для отображения иконки
-            icon_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)  # выровнять QLabel по центру
-            icon = QPixmap(forecast_data['condition:icon'].replace(
-                '//cdn.weatherapi.com', 'path').replace('\\', '/'))
-            icon_label.setPixmap(icon)  # установить картинку на QLabel
-
-            temp_label = QLabel(f"{forecast_data['avgtemp_c']}°")
-            temp_label.setAlignment(
-                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-            frame_layout.addWidget(icon_label)  # добавить QLabel с иконкой внутрь frame
-            frame_layout.addWidget(temp_label)
-
-            layout.addWidget(frame)
-
+        for forecast_data in self.daily_forecast:
+            date_obj = datetime.datetime.strptime(forecast_data['date'], '%Y-%m-%d')
+            weekday_str = weekdays[date_obj.strftime('%A')][self.language]
+            month_str = months[self.language][date_obj.month]
+            day_str = date_obj.day
+            maxtemp_str = f"{'Макс' if self.language == 'ru' else 'Max'} {forecast_data['maxtemp_c']}°"
+            mintemp_str = f"{'Мин' if self.language == 'ru' else 'Min'} {forecast_data['mintemp_c']}°"
+            button = QPushButton(styleSheet="font-family: 'Verdana';", objectName="daily_button", minimumSize=QSize(170, 125))
+            button_layout = QHBoxLayout(button)
+            icon_layout = QVBoxLayout()
+            icon_label = QLabel(pixmap=QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/')))
+            icon_layout.addWidget(icon_label)
+            button_layout.addLayout(icon_layout)
+            separator = QFrame(styleSheet="background-color: rgba(255, 255, 255, 0.3);", objectName="separator")
+            separator.setFrameShape(QFrame.Shape.VLine)
+            separator.setMaximumWidth(1)
+            button_layout.addWidget(separator)
+            info_layout = QVBoxLayout()
+            date_label = QLabel(f"<b>{weekday_str}, {day_str} {month_str}</b>")
+            info_layout.addWidget(date_label)
+            info_layout.addWidget(QLabel(maxtemp_str))
+            info_layout.addWidget(QLabel(mintemp_str))
+            info_layout.addWidget(QLabel(forecast_data['condition:text'], wordWrap=True))
+            button_layout.addLayout(info_layout)
+            for icon_path, text_label_data in [("path\icons\\air_FILL0_wght400_GRAD0_opsz48.svg", f"{forecast_data['maxwind_kph']}{'м/c' if self.language == 'ru' else 'm/s'}"),
+                                            ("path\icons\humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg", f"{forecast_data['avghumidity']}%")]:
+                hbox_layout = QHBoxLayout()
+                hbox_layout.setSpacing(0)
+                hbox_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                hbox_layout.addWidget(QLabel(pixmap=QPixmap(icon_path).scaled(20,20), alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
+                hbox_layout.addWidget(QLabel(text_label_data, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
+                icon_layout.addLayout(hbox_layout)
             forecast_buttons[forecast_data['date']] = button
-
         return forecast_buttons
 
     def parse_hourly_forecast(self, date_str: str) -> dict:
         hourly_forecast = self.data_dict.parse_hourly_forecast(date_str)
         forecast_frames = {}
         for forecast_data in hourly_forecast:
-            frame = QFrame()
-            frame.setMaximumHeight(150)
-            frame.setObjectName("h_scr_fr")
-            layout = QVBoxLayout()
-            frame.setLayout(layout)
-
-            icon = QPixmap(forecast_data['condition:icon'].replace(
-                '//cdn.weatherapi.com', 'path').replace('\\', '/'))
-
-            time_label = QLabel(forecast_data['time'][-5:])
-            time_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            layout.addWidget(time_label)
-
-            icon_label = QLabel()
-            icon_label.setPixmap(icon.scaled(
-                icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))
-            icon_label.setAlignment(
-                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
-            layout.addWidget(icon_label)
-
-            condition_label = QLabel(
-                f"{forecast_data['temp_c']}° {forecast_data['condition:text']}")
-            condition_label.setAlignment(
-                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
-            condition_label.setWordWrap(True)
-            layout.addWidget(condition_label)
-
-            forecast_frames[forecast_data['time']] = frame
-
+            hour = int(forecast_data['time'][-5:-3])
+            if hour >= int(self.time_only[:2]) and self.daily_forecast[0]['date'] == date_str or self.daily_forecast[0]['date'] != date_str:
+                frame = QFrame(objectName="h_scr_fr")
+                layout = QVBoxLayout()
+                frame.setLayout(layout)
+                frame.setStyleSheet('#h_scr_fr:hover {background-color:rgba(255, 255, 255, 0.5);} QLabel { font-family: "Verdana"; }')
+                icon = QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                icon_label = QLabel()
+                icon_label.setPixmap(icon.scaled(icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))
+                icon_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+                text_layout = QVBoxLayout()
+                time_label = QLabel(forecast_data['time'][-5:])
+                time_label.setAlignment(Qt.AlignmentFlag.AlignBottom)
+                text_layout.addWidget(time_label)
+                condition_label = QLabel(('+' if float(forecast_data['temp_c']) > 0 else '') + str(forecast_data['temp_c']) + '°')
+                condition_label.setObjectName('')
+                condition_label.setAlignment(Qt.AlignmentFlag.AlignTop)
+                condition_label.setWordWrap(True)
+                text_layout.addWidget(condition_label)
+                condition_label.setStyleSheet('font-weight: bold;  font-family: "Verdana";')
+                icon_and_text_layout = QHBoxLayout()
+                icon_and_text_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+                icon_and_text_layout.addWidget(icon_label)
+                icon_and_text_layout.addLayout(text_layout)
+                layout.addLayout(icon_and_text_layout)
+                forecast_frames[forecast_data['time']] = frame
         return forecast_frames

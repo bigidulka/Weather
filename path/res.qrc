@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/compress_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/air_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/close_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/remove_FILL0_wght400_GRAD0_opsz48.svg</file>

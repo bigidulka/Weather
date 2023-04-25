@@ -12,10 +12,11 @@ class WeatherData:
         self.data = self.__req_get_weather_data()
 
     def __req_get_weather_data(self) -> Union[dict, str]:
+        url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}'
         if self.coordinates is None:
-            url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q=auto:ip'
+            url += '&q=auto:ip'
         else:
-            url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q={self.coordinates[0]},{self.coordinates[1]}'
+            url += f"&q={self.coordinates[0]},{self.coordinates[1]}"
 
         try:
             with requests.get(url) as response:
@@ -26,42 +27,44 @@ class WeatherData:
             return f'{error}'
 
     def parse_current_weather(self) -> dict:
+        current_data = self.data['current']
+        location_data = self.data['location']
         return {
-            'last_updated': self.data['current']['last_updated'],
-            'last_updated_epoch': self.data['current']['last_updated_epoch'],
-            'temp_c': self.data['current']['temp_c'],
-            'feelslike_c': self.data['current']['feelslike_c'],
-            'condition:text': self.data['current']['condition']['text'],
-            'condition:icon': self.data['current']['condition']['icon'],
-            'wind_kph': self.data['current']['wind_kph'],
-            'wind_dir': self.data['current']['wind_dir'],
-            'pressure_mb': self.data['current']['pressure_mb'],
-            'precip_mm': self.data['current']['precip_mm'],
-            'humidity': self.data['current']['humidity'],
-            'cloud': self.data['current']['cloud'],
-            'is_day': self.data['current']['is_day'],
-            'gust_kph': self.data['current']['gust_kph'],
+            'last_updated': current_data['last_updated'],
+            'last_updated_epoch': current_data['last_updated_epoch'],
+            'temp_c': current_data['temp_c'],
+            'feelslike_c': current_data['feelslike_c'],
+            'condition:text': current_data['condition']['text'],
+            'condition:icon': current_data['condition']['icon'],
+            'wind_kph': current_data['wind_kph'],
+            'wind_dir': current_data['wind_dir'],
+            'pressure_mb': current_data['pressure_mb'],
+            'precip_mm': current_data['precip_mm'],
+            'humidity': current_data['humidity'],
+            'cloud': current_data['cloud'],
+            'is_day': current_data['is_day'],
             'location': {
-                'name': self.data['location']['name'],
-                'region': self.data['location']['region'],
-                'country': self.data['location']['country'],
-                'localtime': self.data['location']['localtime']
+                'name': location_data['name'],
+                'region': location_data['region'],
+                'country': location_data['country'],
+                'localtime': location_data['localtime']
             }
         }
 
     def parse_daily_forecast(self) -> list:
         forecasts = []
         for forecast in self.data['forecast']['forecastday']:
+            day_data = forecast['day']
             forecasts.append({
                 'date': forecast['date'],
-                'maxtemp_c': forecast['day']['maxtemp_c'],
-                'mintemp_c': forecast['day']['mintemp_c'],
-                'avgtemp_c': forecast['day']['avgtemp_c'],
-                'maxwind_kph': forecast['day']['maxwind_kph'],
-                'totalprecip_mm': forecast['day']['totalprecip_mm'],
-                'avghumidity': forecast['day']['avghumidity'],
-                'condition:text': forecast['day']['condition']['text'],
-                'condition:icon': forecast['day']['condition']['icon']
+                'maxtemp_c': day_data['maxtemp_c'],
+                'mintemp_c': day_data['mintemp_c'],
+                'avgtemp_c': day_data['avgtemp_c'],
+                'maxwind_kph': day_data['maxwind_kph'],
+                'totalprecip_mm': day_data['totalprecip_mm'],
+                'avghumidity': day_data['avghumidity'],
+                'condition:text': day_data['condition']['text'],
+                'condition:icon': day_data['condition']['icon']
             })
         return forecasts
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
+    <width>606</width>
     <height>631</height>
    </rect>
   </property>
@@ -193,7 +193,7 @@ border: none;
        <item>
         <widget class="QPushButton" name="search_location">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -206,8 +206,8 @@ border: none;
          </property>
          <property name="maximumSize">
           <size>
-           <width>50</width>
-           <height>40</height>
+           <width>12441234</width>
+           <height>1241234</height>
           </size>
          </property>
          <property name="text">
@@ -227,9 +227,15 @@ border: none;
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>410</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>380</width>
+           <width>410</width>
            <height>16777215</height>
           </size>
          </property>
@@ -250,7 +256,7 @@ border: none;
        <item>
         <widget class="QPushButton" name="hideBtn">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -263,8 +269,8 @@ border: none;
          </property>
          <property name="maximumSize">
           <size>
-           <width>50</width>
-           <height>40</height>
+           <width>2141234</width>
+           <height>12433124</height>
           </size>
          </property>
          <property name="text">
@@ -279,7 +285,7 @@ border: none;
        <item>
         <widget class="QPushButton" name="closeBtn">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -292,8 +298,8 @@ border: none;
          </property>
          <property name="maximumSize">
           <size>
-           <width>50</width>
-           <height>40</height>
+           <width>1423123</width>
+           <height>14124241</height>
           </size>
          </property>
          <property name="text">
@@ -321,7 +327,7 @@ border: none;
         <number>4</number>
        </property>
        <property name="topMargin">
-        <number>20</number>
+        <number>10</number>
        </property>
        <property name="rightMargin">
         <number>4</number>
@@ -452,7 +458,7 @@ border: none;
                       <bool>false</bool>
                      </property>
                      <property name="alignment">
-                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                      </property>
                      <property name="wordWrap">
                       <bool>true</bool>
@@ -484,7 +490,7 @@ border: none;
                       <string>Сейчас 12:53. Вчера в это время 6</string>
                      </property>
                      <property name="alignment">
-                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                      </property>
                     </widget>
                    </item>
@@ -507,7 +513,7 @@ border: none;
                     <number>0</number>
                    </property>
                    <property name="topMargin">
-                    <number>20</number>
+                    <number>0</number>
                    </property>
                    <property name="rightMargin">
                     <number>0</number>
@@ -533,7 +539,7 @@ border: none;
                       <bool>false</bool>
                      </property>
                      <property name="alignment">
-                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                      </property>
                      <property name="margin">
                       <number>0</number>
@@ -657,7 +663,7 @@ border: none;
                          <string>Ощущается как +1</string>
                         </property>
                         <property name="alignment">
-                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                         </property>
                         <property name="wordWrap">
                          <bool>true</bool>
@@ -678,6 +684,11 @@ border: none;
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
                   </property>
@@ -686,44 +697,140 @@ border: none;
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
                    <item>
-                    <widget class="QLabel" name="label_2">
+                    <widget class="QLabel" name="windIco">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="baseSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap resource="res.qrc">:/icons/icons/air_FILL0_wght400_GRAD0_opsz48.svg</pixmap>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_6">
+                    <widget class="QLabel" name="windText">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>1,0 м/с, ЮЗ</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_5">
+                    <widget class="QLabel" name="humIco">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap resource="res.qrc">:/icons/icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg</pixmap>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_4">
+                    <widget class="QLabel" name="humText">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>30%</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_3">
+                    <widget class="QLabel" name="pressIco">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap resource="res.qrc">:/icons/icons/compress_FILL0_wght400_GRAD0_opsz48.svg</pixmap>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="pressText">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>751 мм рт. ст.</string>
                      </property>
                     </widget>
                    </item>
@@ -739,7 +846,7 @@ border: none;
           <item>
            <widget class="QWidget" name="hourly_forecast" native="true">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -769,7 +876,7 @@ border: none;
                <property name="font">
                 <font>
                  <family>Verdana</family>
-                 <pointsize>8</pointsize>
+                 <pointsize>9</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
@@ -804,8 +911,8 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>535</width>
-                  <height>136</height>
+                  <width>580</width>
+                  <height>34</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -826,7 +933,7 @@ border: none;
           <item>
            <widget class="QWidget" name="daily_forecast" native="true">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -865,7 +972,7 @@ border: none;
                <property name="font">
                 <font>
                  <family>Verdana</family>
-                 <pointsize>8</pointsize>
+                 <pointsize>9</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
@@ -906,8 +1013,8 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>535</width>
-                  <height>137</height>
+                  <width>580</width>
+                  <height>34</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">

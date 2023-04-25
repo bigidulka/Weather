@@ -33,48 +33,34 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.error_output(f"'{text}': {self.translation['not_found']}")
         else:
             try:
-                self.weatherData = WeatherData(
-                    WeatherApp.LANGUAGE, coordinates)
+                self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
                 self.translator = Translate(self.weatherData)
-
                 for name, value in self.translator.get_current_translation().items():
                     widget = getattr(self, name)
                     widget.setText(str(value)) if value else None
-
                 self.daily_forecast_scr()
+                self.on_daily_forecast_button_clicked(list(self.daily_forecast_but.keys())[0])
 
-                if not hasattr(self, "_on_daily_forecast_clicked_called"):
-                    self.on_daily_forecast_button_clicked(
-                        list(self.daily_forecast_but.keys())[0])
-                    self._on_daily_forecast_clicked_called = True
-
-                # gui moment
-
-                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
-                    '//cdn.weatherapi.com', 'path').replace('\\', '/'))
-                self.ico.setPixmap(icon)
+                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                self.ico.setPixmap(icon.scaled(100, 100))
                 
                 self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
 
             except Exception as e:
+                print(e)
                 self.error_output(str(e))
-
+    
     def initGUI(self):
-        # window options
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
 
-        # minimazed and close buttons
         self.closeBtn.clicked.connect(QtWidgets.QApplication.instance().quit)
         self.hideBtn.clicked.connect(self.toggle_tray)
 
-        # tray
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(self.style().standardIcon(
-            QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
+        self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
         self.tray_icon.activated.connect(self.toggle_tray)
 
-        # searching
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
         self.search_location.clicked.connect(lambda: self._init_(None))
@@ -86,16 +72,12 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.error_output(self.translation['search_empty'])
 
     def error_output(self, text):
-        timer = QTimer(self)
-
+        timer = QTimer(self)    
         def set_error_style():
-            self.title.setStyleSheet(
-                "#title { background-color: rgba(255, 0, 0, 0.4); border-radius: 0px; }")
+            self.title.setStyleSheet("#title { background-color: rgba(255, 0, 0, 0.4); border-radius: 0px; }")
             self.error.setText(text)
-
             def reset_style():
-                self.title.setStyleSheet(
-                    "#title { background-color: transparent; }")
+                self.title.setStyleSheet("#title { background-color: transparent; }")
                 self.error.setText("")
                 timer.stop()
             timer.timeout.connect(reset_style)
