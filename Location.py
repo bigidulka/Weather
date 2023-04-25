@@ -1,4 +1,3 @@
-import requests
 from typing import Tuple
 from geopy.geocoders import Nominatim
 import pytz
@@ -12,12 +11,6 @@ class Location:
         geolocator = Nominatim(user_agent="geoapiExercises")
         location = geolocator.geocode(text)
         return (location.latitude, location.longitude)
-
-    @staticmethod
-    def get_location_by_ip() -> Tuple[float, float]:
-        response = requests.get('http://ip-api.com/json')
-        data = response.json()
-        return Location.get_coor_city(data['country'] + ' ' + data['city'])
 
     @staticmethod
     def get_name_time(coordinates: Tuple[float, float], language: str) -> dict:

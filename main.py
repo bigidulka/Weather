@@ -4,7 +4,8 @@ import sys
 from location import Location
 from translate import Translate
 from weatherDataWAPI import WeatherData
-
+import path.res
+from path.interface import Ui_MainWindow
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
 from PyQt6.QtCore import Qt, QEvent, QResource
@@ -12,12 +13,24 @@ from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout,
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication
 
 
-class createGUI(QtWidgets.QMainWindow):
+class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self) -> None:
         super().__init__()
-        QtCore.QResource.registerResource('path/res.qrc')
-        uic.loadUi('path/interface.ui', self)
+        self.setupUi(self)
         self.initGUI()
+        
+        self._init_(None)
+
+        self.display_location(text=None)
+        self.on_daily_forecast_button_clicked(
+            list(self.daily_forecast_but.keys())[0])
+
+    def _init_(self, text):
+        self.weatherData = WeatherData('ru', text)
+        self.translator = Translate(self.weatherData)
+
+        if isinstance(self.weatherData.data, str):
+            print("беда")
 
     def initGUI(self):
         # window options
@@ -25,8 +38,8 @@ class createGUI(QtWidgets.QMainWindow):
         self.set_bottom_right()
 
         # minimazed and close buttons
-        self.close.clicked.connect(QtWidgets.QApplication.instance().quit)
-        self.hide.clicked.connect(self.toggle_tray)
+        self.closeBtn.clicked.connect(QtWidgets.QApplication.instance().quit)
+        self.hideBtn.clicked.connect(self.toggle_tray)
 
         # tray
         self.tray_icon = QSystemTrayIcon(self)
@@ -36,10 +49,10 @@ class createGUI(QtWidgets.QMainWindow):
 
         # searching
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
-        self.search.clicked.connect(lambda: self.display_location(Location.get_coor_city(self.searchEdit.toPlainText().strip()))
+        self.search.clicked.connect(lambda: self.display_location(self.searchEdit.toPlainText().strip())
                                     if self.searchEdit.toPlainText().strip() else self.text.setText("Empty"))
         self.search_location.clicked.connect(
-            lambda: self.display_location(Location.get_location_by_ip()))
+            lambda: self.display_location(text=None))
 
     def on_daily_forecast_button_clicked(self, date_str):
         hourly_forecast_fr = self.translator.parse_hourly_forecast(date_str)
@@ -53,11 +66,12 @@ class createGUI(QtWidgets.QMainWindow):
             layout.addWidget(fr)
 
     def daily_forecast_scr(self):
-        daily_forecast_but = self.translator.parse_daily_forecast()
-        
-        self.prognoz14.setText(f'Прогноз на {len(daily_forecast_but.keys())} дней')
+        self.daily_forecast_but = self.translator.parse_daily_forecast()
 
-        for but_date, but in daily_forecast_but.items():
+        self.prognoz14.setText(
+            f'Прогноз на {len(self.daily_forecast_but.keys())} дней')
+
+        for but_date, but in self.daily_forecast_but.items():
             but.clicked.connect(
                 lambda _, but_date=but_date: self.on_daily_forecast_button_clicked(but_date))
 
@@ -66,21 +80,18 @@ class createGUI(QtWidgets.QMainWindow):
             QWidget().setLayout(layout)
 
         layout = QHBoxLayout(self.daily_scrollAreaCont)
-        for but_date, but in daily_forecast_but.items():
+        for but_date, but in self.daily_forecast_but.items():
             layout.addWidget(but)
 
-    def display_location(self, coordinates: tuple[float, float]) -> None:
-        weatherData = WeatherData(coordinates, 'ru')
-        self.translator = Translate(weatherData)
-        if isinstance(weatherData.data, str):
-            raise ValueError()
+    def display_location(self, text: str) -> None:
+        self._init_(text)
 
         for name, value in self.translator.get_current_translation().items():
             if value is not None:
                 widget = getattr(self, name)
                 widget.setText(str(value))
 
-        self.daily_forecast_scr()
+            self.daily_forecast_scr()
 
     def set_bottom_right(self) -> None:
         desktop = QApplication.primaryScreen().geometry()

@@ -6,106 +6,135 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>544</height>
+    <width>500</width>
+    <height>665</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>14</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#title {
-background-color: rgb(249, 249, 249);
-  border-radius: 0px;
+   <string notr="true">#MainWindow {
+background-image: url(:/fons/fons/stock-photo-beautiful-light-blue-sky-clouds.jpg);
 }
 
 QPushButton {
 background-color: transparent;
 border: 2px solid transparent;
-  border-radius: 5px;
-}
-
-#centralWidget {
-  border-radius: 5px;
+border-radius: 5px;
 }
 
 QFrame {
-  border-radius: 5px;
+border-radius: 5px;
+}
+
+#nameCityCountry,#condition,#prognozDn, #prognoz14, #temp {
+font-family: &quot;Verdana&quot;;
+font-weight: bold;
 }
 
 QPushButton:hover {
-background-color: rgba(200, 200, 200, 0.3);
+background-color: rgba(255, 255, 255, 0.5);
 border: 2px solid transparent;
 }
 
 QPushButton:pressed {
-background-color: rgba(200, 200, 200, 0.5);
-border: 2px solid transparent;
+background-color: rgba(255, 255, 255, 0.7);
+border: 2px solid transparent
 }
 
-#today, #hourly_forecast, #daily_forecast {
-  border-radius: 5px;
-  color: #333;
-  background-color: rgb(249, 249, 249);
-  padding: 5px
-
+#hourly_forecast,  #daily_forecast {
+border-radius: 5px;
+background-color:  rgba(255, 255, 255, 0.7);
+padding: 5px;
 }
 
+#hourly_forecast:hover,  #daily_forecast:hover {
+border: 2px solid rgba(232, 232, 232, 0.7);
+}
+
+
+/*скролл арея*/
 QScrollArea {
-                background-color: #ffffff;
-                border: none;
-  border-radius: 5px;
+background-color: transparent;
+border: none;
+border-radius: 5px;
 }
 
 #daily_scrollAreaCont, #hourly_scrollAreaCont {
-background-color: rgb(249, 249, 249);
+background-color: transparent;
 }
 
+
+/*скроллбары*/
 QScrollArea QFrame {
-    background-color: rgba(255, 255, 255, 0.0);
+background-color: transparent;
 }
 
 QScrollBar:horizontal {
-    background-color: rgb(249, 249, 249);
-    height: 10px;
+background-color: transparent;
+height: 10px;
 }
 
 QScrollBar {
-    background-color: transparent;
+background-color: transparent;
 }
 
 QScrollBar::handle {
-    background-color: rgba(200, 200, 200, 0.3);
-    border-radius: 5px;
+background-color: rgba(255, 255, 255, 0.7);
+border-radius: 5px;
+border: none;
 }
 
 QScrollBar::handle:hover, QScrollBar::handle:pressed {
-    background-color: rgba(200, 200, 200, 0.5);
+background-color: rgba(255, 255, 255, 0.9);
 }
 
 QScrollBar::add-page, QScrollBar::sub-page {
-    background-color: transparent;
+background-color: transparent;
 }
 
 QScrollBar::add-line, QScrollBar::sub-line {
-    background-color: transparent;
-    width: 0px;
-    height: 0px;
+background-color: transparent;
+width: 0px;
+height: 0px;
 }
 
 QScrollBar::add-line:horizontal {
-    border-right: 1px solid #333333;
+border-right: 1px solid #fff;
 }
 
 QScrollBar::sub-line:horizontal {
-    border-left: 1px solid #333333;
+border-left: 1px solid #fff;
 }
 
 QScrollBar::handle:horizontal {
-    min-width: 20px;
+min-width: 20px;
 }
 
-</string>
+
+
+/*поиск*/
+#searhPanel {
+background-color: rgba(255, 255, 255, 0.7);
+border-radius: 5px;
+padding: 5px;
+}
+
+#searhPanel:hover {
+border: 2px solid rgba(232, 232, 232, 0.7);
+}
+
+
+
+#searchEdit {
+background-color: rgba(255, 255, 255, 0);
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -179,7 +208,7 @@ QScrollBar::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="res.qrc">
-           <normaloff>:/icon/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+           <normaloff>:/icons/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icons/icons/near_me_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
@@ -197,7 +226,7 @@ QScrollBar::handle:horizontal {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="hide">
+        <widget class="QPushButton" name="hideBtn">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -215,12 +244,12 @@ QScrollBar::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="res.qrc">
-           <normaloff>:/icon/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+           <normaloff>:/icons/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icons/icons/remove_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="close">
+        <widget class="QPushButton" name="closeBtn">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -238,7 +267,7 @@ QScrollBar::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="res.qrc">
-           <normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+           <normaloff>:/icons/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icons/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
          </property>
         </widget>
        </item>
@@ -258,7 +287,7 @@ QScrollBar::handle:horizontal {
         <number>4</number>
        </property>
        <property name="topMargin">
-        <number>6</number>
+        <number>20</number>
        </property>
        <property name="rightMargin">
         <number>4</number>
@@ -293,19 +322,7 @@ QScrollBar::handle:horizontal {
              <string notr="true"/>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
              <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -364,15 +381,61 @@ QScrollBar::handle:horizontal {
                    </property>
                    <item>
                     <widget class="QLabel" name="nameCityCountry">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="palette">
+                      <palette>
+                       <active/>
+                       <inactive/>
+                       <disabled/>
+                      </palette>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>14</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Микрорайон Завода 1 Мая, Киров</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::AutoText</enum>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>false</bool>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QLabel" name="time">
+                     <property name="palette">
+                      <palette>
+                       <active/>
+                       <inactive/>
+                       <disabled/>
+                      </palette>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Сейчас 12:53. Вчера в это время 6</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                      </property>
                     </widget>
                    </item>
@@ -388,25 +451,94 @@ QScrollBar::handle:horizontal {
                    <enum>QFrame::Raised</enum>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>20</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
                    <item>
-                    <widget class="QLabel" name="temp">
+                    <widget class="QLabel" name="ico">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="text">
-                      <string>+6</string>
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap resource="res.qrc">:/weatherDay/weather/64x64/day/113.png</pixmap>
+                     </property>
+                     <property name="scaledContents">
+                      <bool>false</bool>
+                     </property>
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <property name="openExternalLinks">
+                      <bool>false</bool>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QFrame" name="ico">
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
+                    <widget class="QLabel" name="temp">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
                      </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="palette">
+                      <palette>
+                       <active/>
+                       <inactive/>
+                       <disabled/>
+                      </palette>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Verdana</family>
+                       <pointsize>40</pointsize>
+                       <weight>75</weight>
+                       <italic>false</italic>
+                       <bold>true</bold>
+                       <underline>false</underline>
+                       <strikeout>false</strikeout>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>6°</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::AutoText</enum>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QFrame" name="frame_5">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="frameShape">
                       <enum>QFrame::StyledPanel</enum>
                      </property>
@@ -414,17 +546,63 @@ QScrollBar::handle:horizontal {
                       <enum>QFrame::Raised</enum>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>5</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
                       <item>
                        <widget class="QLabel" name="condition">
+                        <property name="palette">
+                         <palette>
+                          <active/>
+                          <inactive/>
+                          <disabled/>
+                         </palette>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Verdana</family>
+                          <pointsize>14</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Пасмурно</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                         </property>
                        </widget>
                       </item>
                       <item>
                        <widget class="QLabel" name="feels_like">
+                        <property name="palette">
+                         <palette>
+                          <active/>
+                          <inactive/>
+                          <disabled/>
+                         </palette>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Verdana</family>
+                          <pointsize>12</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Ощущается как +1</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                         </property>
                        </widget>
                       </item>
@@ -434,7 +612,139 @@ QScrollBar::handle:horizontal {
                   </layout>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QFrame" name="frame">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_6">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_5">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label">
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
                </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="hourly_forecast" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <property name="bottomMargin">
+              <number>3</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="prognozDn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="palette">
+                <palette>
+                 <active/>
+                 <inactive/>
+                 <disabled/>
+                </palette>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Verdana</family>
+                 <pointsize>8</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Почасовой прогноз</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QScrollArea" name="hourly_scrollArea">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="verticalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOff</enum>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAlwaysOn</enum>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <widget class="QWidget" name="hourly_scrollAreaCont">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>470</width>
+                  <height>123</height>
+                 </rect>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+               </widget>
               </widget>
              </item>
             </layout>
@@ -457,6 +767,27 @@ QScrollBar::handle:horizontal {
              </property>
              <item>
               <widget class="QLabel" name="prognoz14">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="palette">
+                <palette>
+                 <active/>
+                 <inactive/>
+                 <disabled/>
+                </palette>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Verdana</family>
+                 <pointsize>8</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>Прогноз на 14 дней</string>
                </property>
@@ -464,6 +795,12 @@ QScrollBar::handle:horizontal {
              </item>
              <item>
               <widget class="QScrollArea" name="daily_scrollArea">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -487,8 +824,8 @@ QScrollBar::handle:horizontal {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>442</width>
-                  <height>130</height>
+                  <width>474</width>
+                  <height>125</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -496,51 +833,6 @@ QScrollBar::handle:horizontal {
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-               </widget>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="hourly_forecast" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_9">
-             <property name="bottomMargin">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="prognozDn">
-               <property name="text">
-                <string>Почасовой прогноз</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QScrollArea" name="hourly_scrollArea">
-               <property name="verticalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
-               </property>
-               <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOn</enum>
-               </property>
-               <property name="sizeAdjustPolicy">
-                <enum>QAbstractScrollArea::AdjustToContents</enum>
-               </property>
-               <property name="widgetResizable">
-                <bool>true</bool>
-               </property>
-               <widget class="QWidget" name="hourly_scrollAreaCont">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>442</width>
-                  <height>130</height>
-                 </rect>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -569,27 +861,7 @@ QScrollBar::handle:horizontal {
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">/* Стиль для элемента с классом &quot;example&quot; */
-#searhPanel {
-
-  color: #333;
-  background-color: rgb(249, 249, 249);
-  border-radius: 5px;
-	padding: 5px
-}
-
-/* Стиль для элемента с классом &quot;example&quot; при наведении мыши на него */
-#searhPanel:hover {
-  background-color: rgba(200, 200, 200, 0.3);
-  border: 1px solid #aaa;
-}
-
-QTextEdit {
-	  font-size: 16px;
-  border: none;
-  background-color: transparent;
-}
-</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -616,16 +888,21 @@ QTextEdit {
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item alignment="Qt::AlignTop">
-           <widget class="QTextEdit" name="searchEdit">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
+          <item>
+           <widget class="QPlainTextEdit" name="searchEdit">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
             </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
+            <property name="undoRedoEnabled">
+             <bool>false</bool>
+            </property>
+            <property name="plainText">
+             <string notr="true"/>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::TextEditable|Qt::TextSelectableByMouse</set>
             </property>
            </widget>
           </item>
@@ -648,7 +925,7 @@ QTextEdit {
             </property>
             <property name="icon">
              <iconset resource="res.qrc">
-              <normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+              <normaloff>:/icons/icons/close_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icons/icons/close_FILL0_wght400_GRAD0_opsz48.svg</iconset>
             </property>
            </widget>
           </item>
@@ -671,7 +948,7 @@ QTextEdit {
             </property>
             <property name="icon">
              <iconset resource="res.qrc">
-              <normaloff>:/icon/icons/search_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/search_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+              <normaloff>:/icons/icons/search_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icons/icons/search_FILL0_wght400_GRAD0_opsz48.svg</iconset>
             </property>
            </widget>
           </item>
