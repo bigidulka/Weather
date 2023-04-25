@@ -8,29 +8,56 @@ import path.res
 from path.interface import Ui_MainWindow
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
-from PyQt6.QtCore import Qt, QEvent, QResource
-from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton
-from PyQt6.QtGui import QIcon, QAction, QGuiApplication
+from PyQt6.QtCore import Qt, QEvent, QResource, QTimer
+from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel
+from PyQt6.QtGui import QIcon, QAction, QGuiApplication, QPixmap
 
 
-class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
+class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
+    LANGUAGE = 'ru'
+
     def __init__(self) -> None:
         super().__init__()
         self.setupUi(self)
         self.initGUI()
-        
+
         self._init_(None)
 
-        self.display_location(text=None)
-        self.on_daily_forecast_button_clicked(
-            list(self.daily_forecast_but.keys())[0])
-
     def _init_(self, text):
-        self.weatherData = WeatherData('ru', text)
-        self.translator = Translate(self.weatherData)
+        coordinates = Location.get_coor_city(text)
 
-        if isinstance(self.weatherData.data, str):
-            print("беда")
+        self.translation = Translate.translation_from_the_front(
+            WeatherApp.LANGUAGE)
+
+        if text and not coordinates:
+            self.error_output(f"'{text}': {self.translation['not_found']}")
+        else:
+            try:
+                self.weatherData = WeatherData(
+                    WeatherApp.LANGUAGE, coordinates)
+                self.translator = Translate(self.weatherData)
+
+                for name, value in self.translator.get_current_translation().items():
+                    widget = getattr(self, name)
+                    widget.setText(str(value)) if value else None
+
+                self.daily_forecast_scr()
+
+                if not hasattr(self, "_on_daily_forecast_clicked_called"):
+                    self.on_daily_forecast_button_clicked(
+                        list(self.daily_forecast_but.keys())[0])
+                    self._on_daily_forecast_clicked_called = True
+
+                # gui moment
+
+                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
+                    '//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                self.ico.setPixmap(icon)
+                
+                self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+
+            except Exception as e:
+                self.error_output(str(e))
 
     def initGUI(self):
         # window options
@@ -49,10 +76,31 @@ class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # searching
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
-        self.search.clicked.connect(lambda: self.display_location(self.searchEdit.toPlainText().strip())
-                                    if self.searchEdit.toPlainText().strip() else self.text.setText("Empty"))
-        self.search_location.clicked.connect(
-            lambda: self.display_location(text=None))
+        self.search.clicked.connect(lambda: self.searh_result())
+        self.search_location.clicked.connect(lambda: self._init_(None))
+
+    def searh_result(self):
+        if self.searchEdit.text().strip():
+            self._init_(self.searchEdit.text().strip())
+        else:
+            self.error_output(self.translation['search_empty'])
+
+    def error_output(self, text):
+        timer = QTimer(self)
+
+        def set_error_style():
+            self.title.setStyleSheet(
+                "#title { background-color: rgba(255, 0, 0, 0.4); border-radius: 0px; }")
+            self.error.setText(text)
+
+            def reset_style():
+                self.title.setStyleSheet(
+                    "#title { background-color: transparent; }")
+                self.error.setText("")
+                timer.stop()
+            timer.timeout.connect(reset_style)
+            timer.start(2000)
+        set_error_style()
 
     def on_daily_forecast_button_clicked(self, date_str):
         hourly_forecast_fr = self.translator.parse_hourly_forecast(date_str)
@@ -68,9 +116,6 @@ class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
     def daily_forecast_scr(self):
         self.daily_forecast_but = self.translator.parse_daily_forecast()
 
-        self.prognoz14.setText(
-            f'Прогноз на {len(self.daily_forecast_but.keys())} дней')
-
         for but_date, but in self.daily_forecast_but.items():
             but.clicked.connect(
                 lambda _, but_date=but_date: self.on_daily_forecast_button_clicked(but_date))
@@ -82,16 +127,6 @@ class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
         layout = QHBoxLayout(self.daily_scrollAreaCont)
         for but_date, but in self.daily_forecast_but.items():
             layout.addWidget(but)
-
-    def display_location(self, text: str) -> None:
-        self._init_(text)
-
-        for name, value in self.translator.get_current_translation().items():
-            if value is not None:
-                widget = getattr(self, name)
-                widget.setText(str(value))
-
-            self.daily_forecast_scr()
 
     def set_bottom_right(self) -> None:
         desktop = QApplication.primaryScreen().geometry()
@@ -111,6 +146,6 @@ class createGUI(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    window = createGUI()
+    window = WeatherApp()
     window.show()
     app.exec()

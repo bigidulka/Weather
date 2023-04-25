@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from geopy.geocoders import Nominatim
 import pytz
 import datetime
@@ -6,16 +6,16 @@ from timezonefinder import TimezoneFinder
 
 
 class Location:
+    geolocator = Nominatim(user_agent="geoapiExercises")
+
     @staticmethod
-    def get_coor_city(text: str) -> Tuple[float, float]:
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.geocode(text)
-        return (location.latitude, location.longitude)
+    def get_coor_city(text: str) -> Optional[Tuple[float, float]]:
+        location = Location.geolocator.geocode(text)
+        return (location.latitude, location.longitude) if location else None
 
     @staticmethod
     def get_name_time(coordinates: Tuple[float, float], language: str) -> dict:
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        reverse = geolocator.reverse
+        reverse = Location.geolocator.reverse
         location = reverse(
             f"{coordinates[0]}, {coordinates[1]}", language=language)
 

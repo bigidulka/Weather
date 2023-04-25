@@ -3,14 +3,29 @@ from location import Location
 from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QByteArray
-from PyQt6 import QtWidgets, QtGui
-from datetime import datetime
 
 class Translate:
     def __init__(self, data_dict: WeatherData) -> None:
         self.language = data_dict.language
         self.coordinates = data_dict.coordinates
         self.data_dict = data_dict
+
+    @staticmethod
+    def translation_from_the_front(language):
+        if language == 'en':
+            return {"search_placeholder": "Search",
+                    "forecast_several_days": "Forecast for several days",
+                    "hourly_forecast": "Hourly forecast",
+                    "not_found": "Not found",
+                    "search_empty": "Search Empty"}
+        elif language == 'ru':
+            return {"search_placeholder": "Поиск",
+                    "forecast_several_days": "Прогноз на несколько дней",
+                    "hourly_forecast": "Почасовой прогноз",
+                    "not_found": "Не найдено",
+                    "search_empty": "Строка пустая"}
+        else:
+            raise ValueError(f"Unsupported language: {language}")
 
     def get_current_translation(self):
         current_weather = self.data_dict.parse_current_weather()
@@ -38,17 +53,38 @@ class Translate:
             raise ValueError(f"Unsupported language: {self.language}")
         return translation
 
+    from PyQt5.QtWidgets import QFrame
+
     def parse_daily_forecast(self) -> dict:
         daily_forecast = self.data_dict.parse_daily_forecast()
         forecast_buttons = {}
         for forecast_data in daily_forecast:
             button = QPushButton()
+            button.setObjectName("daily_button")
             button.setFlat(True)
-            button.setText(
-                f"date: {forecast_data['date']}\navg: {forecast_data['avgtemp_c']}")
 
             layout = QVBoxLayout()
             button.setLayout(layout)
+
+            frame = QFrame()
+            frame.setMinimumHeight(150)
+            frame.setObjectName("daily_frame")
+            frame_layout = QVBoxLayout()
+            frame.setLayout(frame_layout)
+
+            icon_label = QLabel()  # добавить QLabel для отображения иконки
+            icon_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)  # выровнять QLabel по центру
+            icon = QPixmap(forecast_data['condition:icon'].replace(
+                '//cdn.weatherapi.com', 'path').replace('\\', '/'))
+            icon_label.setPixmap(icon)  # установить картинку на QLabel
+
+            temp_label = QLabel(f"{forecast_data['avgtemp_c']}°")
+            temp_label.setAlignment(
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+            frame_layout.addWidget(icon_label)  # добавить QLabel с иконкой внутрь frame
+            frame_layout.addWidget(temp_label)
+
+            layout.addWidget(frame)
 
             forecast_buttons[forecast_data['date']] = button
 
@@ -59,26 +95,21 @@ class Translate:
         forecast_frames = {}
         for forecast_data in hourly_forecast:
             frame = QFrame()
-            # устанавливаем уникальное имя для фрейма
+            frame.setMaximumHeight(150)
             frame.setObjectName("h_scr_fr")
             layout = QVBoxLayout()
             frame.setLayout(layout)
 
-            # Устанавливаем стиль для frame с помощью CSS-свойств
-            frame.setStyleSheet("""
-                #h_scr_fr:hover {
-                    background-color: rgba(200, 200, 200, 0.3);
-                }
-            """)
-
-            icon = QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+            icon = QPixmap(forecast_data['condition:icon'].replace(
+                '//cdn.weatherapi.com', 'path').replace('\\', '/'))
 
             time_label = QLabel(forecast_data['time'][-5:])
             time_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
             layout.addWidget(time_label)
 
             icon_label = QLabel()
-            icon_label.setPixmap(icon.scaled(icon.width(), 50, Qt.AspectRatioMode.KeepAspectRatio))
+            icon_label.setPixmap(icon.scaled(
+                icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))
             icon_label.setAlignment(
                 Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
             layout.addWidget(icon_label)
@@ -87,6 +118,7 @@ class Translate:
                 f"{forecast_data['temp_c']}° {forecast_data['condition:text']}")
             condition_label.setAlignment(
                 Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
+            condition_label.setWordWrap(True)
             layout.addWidget(condition_label)
 
             forecast_frames[forecast_data['time']] = frame

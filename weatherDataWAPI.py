@@ -4,31 +4,26 @@ from location import Location
 
 
 class WeatherData:
-    API_KEY = '487da948423c4322b24221408231703 123'
+    API_KEY = '487da948423c4322b24221408231703'
 
-    def __init__(self, language: str, text: str) -> None:
-        self.text = text
-        self.coordinates = None
+    def __init__(self, language: str, coordinates: tuple) -> None:
+        self.coordinates = coordinates
         self.language = language
         self.data = self.__req_get_weather_data()
 
     def __req_get_weather_data(self) -> Union[dict, str]:
-        if self.text is None:
+        if self.coordinates is None:
             url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q=auto:ip'
         else:
-            self.coordinates = Location.get_coor_city(self.text)
             url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q={self.coordinates[0]},{self.coordinates[1]}'
 
         try:
             with requests.get(url) as response:
                 response.raise_for_status()
                 json_data = response.json()
-                if self.text is None:
-                    self.coordinates = (
-                        json_data['location']['lat'], json_data['location']['lon'])
                 return json_data
         except requests.exceptions.HTTPError as error:
-            return f'HTTP error occurred: {error}'
+            return f'{error}'
 
     def parse_current_weather(self) -> dict:
         return {
