@@ -12,12 +12,7 @@ class WeatherData:
         self.data = self.__req_get_weather_data()
 
     def __req_get_weather_data(self) -> Union[dict, str]:
-        url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}'
-        if self.coordinates is None:
-            url += '&q=auto:ip'
-        else:
-            url += f"&q={self.coordinates[0]},{self.coordinates[1]}"
-
+        url = f'http://api.weatherapi.com/v1/forecast.json?key={WeatherData.API_KEY}&units=metric&days=14&lang={self.language}&q={self.coordinates[0]},{self.coordinates[1]}'
         try:
             with requests.get(url) as response:
                 response.raise_for_status()

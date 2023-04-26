@@ -24,11 +24,9 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self._init_(None)
 
     def _init_(self, text):
-        coordinates = Location.get_coor_city(text)
-
-        self.translation = Translate.translation_from_the_front(
-            WeatherApp.LANGUAGE)
-
+        coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
+        self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
+        
         if text and not coordinates:
             self.error_output(f"'{text}': {self.translation['not_found']}")
         else:

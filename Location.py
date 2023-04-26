@@ -3,6 +3,7 @@ from geopy.geocoders import Nominatim
 import pytz
 import datetime
 from timezonefinder import TimezoneFinder
+import requests
 
 
 class Location:
@@ -11,7 +12,13 @@ class Location:
     @staticmethod
     def get_coor_city(text: str) -> Optional[Tuple[float, float]]:
         location = Location.geolocator.geocode(text)
-        return (location.latitude, location.longitude) if location else None
+        return (location.latitude, location.longitude)
+    
+    @staticmethod
+    def get_location_by_ip() -> Tuple[float, float]:
+        response = requests.get('http://ip-api.com/json')
+        data = response.json()
+        return Location.get_coor_city(data['country'] + ' ' + data['city'])
 
     @staticmethod
     def get_name_time(coordinates: Tuple[float, float], language: str) -> dict:
