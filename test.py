@@ -1,32 +1,29 @@
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 
-# Укажите путь к папке, в которой находятся изображения
-input_folder = 'C:/Users/udinc/OneDrive/Рабочий стол/Weather/path/fons'
+# указываем путь к папке с изображениями
+img_dir = 'C:/Users/udinc/OneDrive/Рабочий стол/проект/Weather/path/icons'
 
-# Укажите путь к папке, в которую будут сохранены измененные изображения
-output_folder = 'C:/Users/udinc/OneDrive/Рабочий стол/Weather/path/fons/out'
+# создаем новую папку для сохранения измененных изображений
+new_dir = 'C:/Users/udinc/OneDrive/Рабочий стол/проект/Weather/path/icons/ma'
+if not os.path.exists(new_dir):
+    os.makedirs(new_dir)
 
-# Укажите желаемый размер изображений (ширина, высота)
-desired_size = (1024, 700)
-
-# Цикл по всем файлам в папке ввода
-for filename in os.listdir(input_folder):
-    # Получаем полный путь к файлу
-    input_path = os.path.join(input_folder, filename)
-
-    # Открываем изображение с помощью библиотеки PIL
-    with Image.open(input_path) as im:
-        # Определяем соотношение сторон и вычисляем новый размер с сохранением пропорций
-        aspect_ratio = im.width / im.height
-        new_width = int(desired_size[1] * aspect_ratio)
-        new_size = (new_width, desired_size[1])
-
-        # Изменяем размер изображения
-        resized_im = im.resize(new_size)
-
-        # Сохраняем измененное изображение в папку вывода
-        output_path = os.path.join(output_folder, filename)
-        resized_im.save(output_path)
-
-print("Изображения успешно изменены и сохранены в", output_folder)
+# перебираем все файлы в папке
+for filename in os.listdir(img_dir):
+    # проверяем, является ли файл изображением
+    if filename.endswith('.png'):
+        # открываем изображение
+        img = Image.open(os.path.join(img_dir, filename))
+        
+        # изменяем цвет изображения на черно-белый
+        if img.mode == 'P' and 'transparency' in img.info:
+            img = img.convert('RGBA')
+            
+        img = ImageOps.invert(img.convert('RGB'))
+        
+        # добавляем постфикс в имя файла
+        new_filename = os.path.splitext(filename)[0] + '_inv' + os.path.splitext(filename)[1]
+        
+        # сохраняем измененное изображение в новую папку
+        img.save(os.path.join(new_dir, new_filename))

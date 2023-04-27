@@ -8,9 +8,9 @@ from weatherDataWAPI import WeatherData
 import path.res
 from path.interface import Ui_MainWindow
 # pyqt6
-from PyQt6 import QtWidgets, QtCore, uic
+from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt, QEvent, QResource, QTimer
-from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel, QSizePolicy
+from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel, QGraphicsBlurEffect
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication, QPixmap
 
 
@@ -25,31 +25,36 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.initData(None)
 
     def initData(self, text):
-        coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
-        self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
-        
+        coordinates = Location.get_location_by_ip(
+        ) if text is None else Location.get_coor_city(text)
+        self.translation = Translate.translation_from_the_front(
+            WeatherApp.LANGUAGE)
+
         if text and not coordinates:
             self.error_output(f"'{text}': {self.translation['not_found']}")
         else:
             try:
-                self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
+                self.weatherData = WeatherData(
+                    WeatherApp.LANGUAGE, coordinates)
                 self.translator = Translate(self.weatherData)
                 for name, value in self.translator.get_current_translation().items():
                     widget = getattr(self, name)
                     widget.setText(str(value)) if value else None
                 self.daily_forecast_scr()
-                self.on_daily_forecast_button_clicked(list(self.daily_forecast_but.keys())[0])
+                self.on_daily_forecast_button_clicked(
+                    list(self.daily_forecast_but.keys())[0])
 
-                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
+                    '//cdn.weatherapi.com', 'path').replace('\\', '/'))
                 self.ico.setPixmap(icon.scaled(100, 100))
-                self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
-                self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+                self.searchEdit.setPlaceholderText(
+                    self.translation['search_placeholder'])
                 self.set_fon()
 
             except Exception as e:
                 print(e)
                 self.error_output(str(e))
-    
+
     def initGUI(self):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
@@ -58,29 +63,57 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.hideBtn.clicked.connect(self.toggle_tray)
 
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
+        self.tray_icon.setIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
         self.tray_icon.activated.connect(self.toggle_tray)
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
         self.search_location.clicked.connect(lambda: self.initData(None))
-        
-        self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
-        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.daily_scrollArea)
-    
+
+        self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(
+            event, self.hourly_scrollArea)
+        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(
+            event, self.daily_scrollArea)
+
+        self.hourly_forecast.event
+
     def set_fon(self):
         localtime = datetime.datetime.strptime(self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
+        fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg",16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
         hour = localtime.hour
-        fons = {3: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg", 16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
+        
         for i in range(hour, hour + 24):
             if i % 24 in fons:
-                prev_styles = self.styleSheet()
-                self.setStyleSheet(prev_styles + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }")
+                bg_color, font_color = ("255, 255, 255", "black") if fons[i % 24] in ["5.webp", "6.jpg", "7.jpg", "9.jpg"] else ("0, 0, 0", "white")
+                self.setStyleSheet(self.styleSheet() + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" + 
+                    "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" + 
+                    """QPushButton:hover {
+                            background-color: rgba(""" + bg_color + """, 0.3);
+                        }
+                        QPushButton:pressed {
+                            background-color: rgba(""" + bg_color + """, 0.5);
+                        }
+                        #hourly_forecast,  #daily_forecast, #searhPanel {
+                            border-radius: 5px;
+                            background-color:  rgba(""" + bg_color + """, 0.5);
+                            padding: 5px;
+                        }
+                        QScrollBar::handle {
+                            background-color: rgba(""" + bg_color + """, 0.3);
+                            border-radius: 3px;
+                            border: none;
+                        }
+                        QScrollBar::handle:hover, QScrollBar::handle:pressed {
+                            background-color: rgba(""" + bg_color + """, 0.5);
+                        }
+                        """)
                 break
-       
+
     def scroll_widget(self, event, scrollArea):
         delta = event.angleDelta().y()
-        scrollArea.horizontalScrollBar().setValue(scrollArea.horizontalScrollBar().value() - delta)
+        scrollArea.horizontalScrollBar().setValue(
+            scrollArea.horizontalScrollBar().value() - delta)
         event.accept()
 
     def searh_result(self):
@@ -90,12 +123,16 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.error_output(self.translation['search_empty'])
 
     def error_output(self, text):
-        timer = QTimer(self)    
+        timer = QTimer(self)
+
         def set_error_style():
-            self.title.setStyleSheet("#title { background-color: rgba(255, 0, 0, 0.4); border-radius: 0px; }")
+            self.title.setStyleSheet(
+                "#title { background-color: rgba(255, 0, 0, 0.4); border-radius: 0px; }")
             self.error.setText(text)
+
             def reset_style():
-                self.title.setStyleSheet("#title { background-color: transparent; }")
+                self.title.setStyleSheet(
+                    "#title { background-color: transparent; }")
                 self.error.setText("")
                 timer.stop()
             timer.timeout.connect(reset_style)
@@ -105,10 +142,12 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def on_daily_forecast_button_clicked(self, date_str):
         button = self.sender()
         if button and button.objectName() == "daily_button":
-            self.prognozDn.setText(self.translation['hourly_forecast'].format(n=button.findChild(QLabel, "date_label").text()))
+            self.prognozDn.setText(self.translation['hourly_forecast'].format(
+                n=button.findChild(QLabel, "date_label").text()))
         else:
-            self.prognozDn.setText(self.translation['hourly_forecast'].format(n=self.daily_forecast_but[date_str].findChild(QLabel, "date_label").text()))
-        
+            self.prognozDn.setText(self.translation['hourly_forecast'].format(
+                n=self.daily_forecast_but[date_str].findChild(QLabel, "date_label").text()))
+
         hourly_forecast_fr = self.translator.parse_hourly_forecast(date_str)
 
         layout = self.hourly_scrollAreaCont.layout()

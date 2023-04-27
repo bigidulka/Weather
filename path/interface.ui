@@ -21,7 +21,6 @@
   <property name="styleSheet">
    <string notr="true">QPushButton {
 background-color: transparent;
-border: 2px solid transparent;
 border-radius: 5px;
 }
 
@@ -34,24 +33,33 @@ font-family: &quot;Verdana&quot;;
 font-weight: bold;
 }
 
+#searhPanel:hover {
+border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+/*изменяемо*/
 QPushButton:hover {
 background-color: rgba(255, 255, 255, 0.5);
-border: 2px solid transparent;
 }
 
 QPushButton:pressed {
 background-color: rgba(255, 255, 255, 0.7);
-border: 2px solid transparent
 }
 
-#hourly_forecast,  #daily_forecast {
+#hourly_forecast,  #daily_forecast, #searhPanel {
 border-radius: 5px;
 background-color:  rgba(255, 255, 255, 0.7);
 padding: 5px;
 }
 
-#hourly_forecast:hover,  #daily_forecast:hover {
-border: 2px solid rgba(232, 232, 232, 0.7);
+QScrollBar::handle {
+background-color: rgba(255, 255, 255, 0.5);
+border-radius: 3px;
+border: none;
+}
+
+QScrollBar::handle:hover, QScrollBar::handle:pressed {
+background-color: rgba(255, 255, 255, 0.7);
 }
 
 
@@ -59,7 +67,6 @@ border: 2px solid rgba(232, 232, 232, 0.7);
 QScrollArea {
 background-color: transparent;
 border: none;
-border-radius: 5px;
 }
 
 #daily_scrollAreaCont, #hourly_scrollAreaCont {
@@ -79,16 +86,6 @@ height: 8px;
 
 QScrollBar {
 background-color: transparent;
-}
-
-QScrollBar::handle {
-background-color: rgba(255, 255, 255, 0.7);
-border-radius: 3px;
-border: none;
-}
-
-QScrollBar::handle:hover, QScrollBar::handle:pressed {
-background-color: rgba(255, 255, 255, 0.9);
 }
 
 QScrollBar::add-page, QScrollBar::sub-page {
@@ -113,21 +110,7 @@ QScrollBar::handle:horizontal {
 min-width: 20px;
 }
 
-
-
 /*поиск*/
-#searhPanel {
-background-color: rgba(255, 255, 255, 0.7);
-border-radius: 5px;
-padding: 5px;
-}
-
-#searhPanel:hover {
-border: 2px solid rgba(232, 232, 232, 0.7);
-}
-
-
-
 #searchEdit {
 background-color: rgba(255, 255, 255, 0);
 border: none;
@@ -520,7 +503,7 @@ border: none;
                    <item>
                     <widget class="QLabel" name="ico">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -548,7 +531,7 @@ border: none;
                    <item>
                     <widget class="QLabel" name="temp">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -586,9 +569,22 @@ border: none;
                     </widget>
                    </item>
                    <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
                     <widget class="QFrame" name="frame_5">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -695,7 +691,7 @@ border: none;
                    <item>
                     <widget class="QLabel" name="windIco">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -735,6 +731,8 @@ border: none;
                       <font>
                        <family>Verdana</family>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
                       </font>
                      </property>
                      <property name="text">
@@ -743,9 +741,22 @@ border: none;
                     </widget>
                    </item>
                    <item>
+                    <spacer name="horizontalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
                     <widget class="QLabel" name="humIco">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -779,6 +790,8 @@ border: none;
                       <font>
                        <family>Verdana</family>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
                       </font>
                      </property>
                      <property name="text">
@@ -787,9 +800,22 @@ border: none;
                     </widget>
                    </item>
                    <item>
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
                     <widget class="QLabel" name="pressIco">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -823,6 +849,8 @@ border: none;
                       <font>
                        <family>Verdana</family>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
                       </font>
                      </property>
                      <property name="text">
@@ -858,7 +886,7 @@ border: none;
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>6</number>
+              <number>9</number>
              </property>
              <property name="topMargin">
               <number>6</number>
@@ -934,7 +962,7 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>586</width>
+                  <width>583</width>
                   <height>90</height>
                  </rect>
                 </property>
@@ -966,7 +994,7 @@ border: none;
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>6</number>
+              <number>9</number>
              </property>
              <property name="topMargin">
               <number>6</number>
@@ -978,32 +1006,58 @@ border: none;
               <number>3</number>
              </property>
              <item>
-              <widget class="QLabel" name="prognoz14">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <property name="spacing">
+                <number>3</number>
                </property>
-               <property name="palette">
-                <palette>
-                 <active/>
-                 <inactive/>
-                 <disabled/>
-                </palette>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Verdana</family>
-                 <pointsize>9</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Прогноз на 14 дней</string>
-               </property>
-              </widget>
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="res.qrc">:/icons/icons/calendar_month_FILL0_wght400_GRAD0_opsz48.svg</pixmap>
+                 </property>
+                 <property name="scaledContents">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="prognoz14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="palette">
+                  <palette>
+                   <active/>
+                   <inactive/>
+                   <disabled/>
+                  </palette>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>Verdana</family>
+                   <pointsize>9</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Прогноз на 14 дней</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
              <item>
               <widget class="QScrollArea" name="daily_scrollArea">
@@ -1036,8 +1090,8 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>586</width>
-                  <height>42</height>
+                  <width>583</width>
+                  <height>50</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -1102,6 +1156,12 @@ border: none;
           </property>
           <item>
            <widget class="QLineEdit" name="searchEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1128,7 +1188,7 @@ border: none;
           <item>
            <widget class="QPushButton" name="clear">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -1151,7 +1211,7 @@ border: none;
           <item>
            <widget class="QPushButton" name="search">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>

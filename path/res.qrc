@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/calendar_month_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/compress_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/air_FILL0_wght400_GRAD0_opsz48.svg</file>

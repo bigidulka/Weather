@@ -16,12 +16,12 @@ class Translate:
     def translation_from_the_front(language):
         translations = {
             'en': {"search_placeholder": "Search",
-                   "forecast_several_days": "Forecast for {n} days",
+                   "forecast_several_days": "Forecast for 14 days",
                    "hourly_forecast": "Hourly forecast for {n}",
                    "not_found": "Not found",
                    "search_empty": "Search Empty"},
             'ru': {"search_placeholder": "Поиск",
-                   "forecast_several_days": "Прогноз на {n} дней",
+                   "forecast_several_days": "Прогноз на 14 дней",
                    "hourly_forecast": "Почасовой прогноз на {n}",
                    "not_found": "Не найдено",
                    "search_empty": "Строка пустая"}
@@ -73,7 +73,7 @@ class Translate:
                 'feels_like': f"Ощущается как {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
                 'windText': f"{current_weather.get('wind_kph', '')}м/c, {wind_directions.get(current_weather.get('wind_dir', ''), '')}",
                 'humText': f"{current_weather.get('humidity', '')}%",
-                'pressText': f"{current_weather.get('pressure_mb', '')} мм рт. ст."
+                'pressText': f"{current_weather.get('pressure_mb', '')}ммРт. ст."
             }
         }
         return translations[self.language]
@@ -95,10 +95,10 @@ class Translate:
 
         self.daily_forecast = self.data_dict.parse_daily_forecast()
         forecast_buttons = {}
-        for forecast_data in self.daily_forecast:
+        for idx, forecast_data in enumerate(self.daily_forecast):
             date_obj = datetime.datetime.strptime(
                 forecast_data['date'], '%Y-%m-%d')
-            weekday_str = weekdays[date_obj.strftime('%A')][self.language]
+            weekday_str = weekdays[date_obj.strftime('%A')][self.language] if idx > 0 else "Сегодня" if self.language == 'ru' else 'Today'
             month_str = months[self.language][date_obj.month]
             day_str = date_obj.day
             maxtemp_str = f"{'Макс' if self.language == 'ru' else 'Max'} {forecast_data['maxtemp_c']}°"

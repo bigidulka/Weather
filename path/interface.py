@@ -18,7 +18,6 @@ class Ui_MainWindow(object):
         MainWindow.setFont(font)
         MainWindow.setStyleSheet("QPushButton {\n"
 "background-color: transparent;\n"
-"border: 2px solid transparent;\n"
 "border-radius: 5px;\n"
 "}\n"
 "\n"
@@ -31,24 +30,33 @@ class Ui_MainWindow(object):
 "font-weight: bold;\n"
 "}\n"
 "\n"
+"#searhPanel:hover {\n"
+"border: 1px solid rgba(200, 200, 200, 0.1);\n"
+"}\n"
+"\n"
+"/*изменяемо*/\n"
 "QPushButton:hover {\n"
 "background-color: rgba(255, 255, 255, 0.5);\n"
-"border: 2px solid transparent;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
 "background-color: rgba(255, 255, 255, 0.7);\n"
-"border: 2px solid transparent\n"
 "}\n"
 "\n"
-"#hourly_forecast,  #daily_forecast {\n"
+"#hourly_forecast,  #daily_forecast, #searhPanel {\n"
 "border-radius: 5px;\n"
 "background-color:  rgba(255, 255, 255, 0.7);\n"
 "padding: 5px;\n"
 "}\n"
 "\n"
-"#hourly_forecast:hover,  #daily_forecast:hover {\n"
-"border: 2px solid rgba(232, 232, 232, 0.7);\n"
+"QScrollBar::handle {\n"
+"background-color: rgba(255, 255, 255, 0.5);\n"
+"border-radius: 3px;\n"
+"border: none;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:hover, QScrollBar::handle:pressed {\n"
+"background-color: rgba(255, 255, 255, 0.7);\n"
 "}\n"
 "\n"
 "\n"
@@ -56,7 +64,6 @@ class Ui_MainWindow(object):
 "QScrollArea {\n"
 "background-color: transparent;\n"
 "border: none;\n"
-"border-radius: 5px;\n"
 "}\n"
 "\n"
 "#daily_scrollAreaCont, #hourly_scrollAreaCont {\n"
@@ -76,16 +83,6 @@ class Ui_MainWindow(object):
 "\n"
 "QScrollBar {\n"
 "background-color: transparent;\n"
-"}\n"
-"\n"
-"QScrollBar::handle {\n"
-"background-color: rgba(255, 255, 255, 0.7);\n"
-"border-radius: 3px;\n"
-"border: none;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:hover, QScrollBar::handle:pressed {\n"
-"background-color: rgba(255, 255, 255, 0.9);\n"
 "}\n"
 "\n"
 "QScrollBar::add-page, QScrollBar::sub-page {\n"
@@ -110,21 +107,7 @@ class Ui_MainWindow(object):
 "min-width: 20px;\n"
 "}\n"
 "\n"
-"\n"
-"\n"
 "/*поиск*/\n"
-"#searhPanel {\n"
-"background-color: rgba(255, 255, 255, 0.7);\n"
-"border-radius: 5px;\n"
-"padding: 5px;\n"
-"}\n"
-"\n"
-"#searhPanel:hover {\n"
-"border: 2px solid rgba(232, 232, 232, 0.7);\n"
-"}\n"
-"\n"
-"\n"
-"\n"
 "#searchEdit {\n"
 "background-color: rgba(255, 255, 255, 0);\n"
 "border: none;\n"
@@ -295,7 +278,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.ico = QtWidgets.QLabel(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ico.sizePolicy().hasHeightForWidth())
@@ -308,7 +291,7 @@ class Ui_MainWindow(object):
         self.ico.setObjectName("ico")
         self.horizontalLayout_3.addWidget(self.ico)
         self.temp = QtWidgets.QLabel(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.temp.sizePolicy().hasHeightForWidth())
@@ -328,8 +311,10 @@ class Ui_MainWindow(object):
         self.temp.setTextFormat(QtCore.Qt.TextFormat.AutoText)
         self.temp.setObjectName("temp")
         self.horizontalLayout_3.addWidget(self.temp)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem)
         self.frame_5 = QtWidgets.QFrame(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
@@ -381,7 +366,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.windIco = QtWidgets.QLabel(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.windIco.sizePolicy().hasHeightForWidth())
@@ -402,11 +387,15 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Verdana")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.windText.setFont(font)
         self.windText.setObjectName("windText")
         self.horizontalLayout_4.addWidget(self.windText)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem1)
         self.humIco = QtWidgets.QLabel(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.humIco.sizePolicy().hasHeightForWidth())
@@ -426,11 +415,15 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Verdana")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.humText.setFont(font)
         self.humText.setObjectName("humText")
         self.horizontalLayout_4.addWidget(self.humText)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem2)
         self.pressIco = QtWidgets.QLabel(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pressIco.sizePolicy().hasHeightForWidth())
@@ -450,6 +443,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("Verdana")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.pressText.setFont(font)
         self.pressText.setObjectName("pressText")
         self.horizontalLayout_4.addWidget(self.pressText)
@@ -465,7 +460,7 @@ class Ui_MainWindow(object):
         self.hourly_forecast.setMinimumSize(QtCore.QSize(0, 0))
         self.hourly_forecast.setObjectName("hourly_forecast")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.hourly_forecast)
-        self.verticalLayout_9.setContentsMargins(6, 6, 6, 3)
+        self.verticalLayout_9.setContentsMargins(9, 6, 6, 3)
         self.verticalLayout_9.setSpacing(0)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
         self.prognozDn = QtWidgets.QLabel(self.hourly_forecast)
@@ -498,7 +493,7 @@ class Ui_MainWindow(object):
         self.hourly_scrollArea.setWidgetResizable(True)
         self.hourly_scrollArea.setObjectName("hourly_scrollArea")
         self.hourly_scrollAreaCont = QtWidgets.QWidget()
-        self.hourly_scrollAreaCont.setGeometry(QtCore.QRect(0, 0, 586, 90))
+        self.hourly_scrollAreaCont.setGeometry(QtCore.QRect(0, 0, 583, 90))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -517,11 +512,21 @@ class Ui_MainWindow(object):
         self.daily_forecast.setSizePolicy(sizePolicy)
         self.daily_forecast.setObjectName("daily_forecast")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.daily_forecast)
-        self.verticalLayout_8.setContentsMargins(6, 6, 6, 3)
+        self.verticalLayout_8.setContentsMargins(9, 6, 6, 3)
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setSpacing(3)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.label = QtWidgets.QLabel(self.daily_forecast)
+        self.label.setMaximumSize(QtCore.QSize(20, 20))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap(":/icons/icons/calendar_month_FILL0_wght400_GRAD0_opsz48.svg"))
+        self.label.setScaledContents(True)
+        self.label.setObjectName("label")
+        self.horizontalLayout_5.addWidget(self.label)
         self.prognoz14 = QtWidgets.QLabel(self.daily_forecast)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.prognoz14.sizePolicy().hasHeightForWidth())
@@ -535,7 +540,8 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.prognoz14.setFont(font)
         self.prognoz14.setObjectName("prognoz14")
-        self.verticalLayout_8.addWidget(self.prognoz14)
+        self.horizontalLayout_5.addWidget(self.prognoz14)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_5)
         self.daily_scrollArea = QtWidgets.QScrollArea(self.daily_forecast)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -549,7 +555,7 @@ class Ui_MainWindow(object):
         self.daily_scrollArea.setWidgetResizable(True)
         self.daily_scrollArea.setObjectName("daily_scrollArea")
         self.daily_scrollAreaCont = QtWidgets.QWidget()
-        self.daily_scrollAreaCont.setGeometry(QtCore.QRect(0, 0, 586, 42))
+        self.daily_scrollAreaCont.setGeometry(QtCore.QRect(0, 0, 583, 50))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -578,6 +584,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.searchEdit = QtWidgets.QLineEdit(self.searhPanel)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.searchEdit.sizePolicy().hasHeightForWidth())
+        self.searchEdit.setSizePolicy(sizePolicy)
         self.searchEdit.setMinimumSize(QtCore.QSize(0, 28))
         self.searchEdit.setMaximumSize(QtCore.QSize(16777215, 28))
         font = QtGui.QFont()
@@ -588,7 +599,7 @@ class Ui_MainWindow(object):
         self.searchEdit.setObjectName("searchEdit")
         self.horizontalLayout_2.addWidget(self.searchEdit)
         self.clear = QtWidgets.QPushButton(self.searhPanel)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Ignored)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.clear.sizePolicy().hasHeightForWidth())
@@ -599,7 +610,7 @@ class Ui_MainWindow(object):
         self.clear.setObjectName("clear")
         self.horizontalLayout_2.addWidget(self.clear)
         self.search = QtWidgets.QPushButton(self.searhPanel)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.search.sizePolicy().hasHeightForWidth())
