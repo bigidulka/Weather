@@ -29,11 +29,7 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(14)
         MainWindow.setFont(font)
-        MainWindow.setStyleSheet(u"#MainWindow {\n"
-"background-image: url(:/fons/fons/stock-photo-beautiful-light-blue-sky-clouds.jpg);\n"
-"}\n"
-"\n"
-"QPushButton {\n"
+        MainWindow.setStyleSheet(u"QPushButton {\n"
 "background-color: transparent;\n"
 "border: 2px solid transparent;\n"
 "border-radius: 5px;\n"
@@ -71,14 +67,14 @@ class Ui_MainWindow(object):
 "\n"
 "/*\u0441\u043a\u0440\u043e\u043b\u043b \u0430\u0440\u0435\u044f*/\n"
 "QScrollArea {\n"
-"background-color: transp"
-                        "arent;\n"
+"background-color: transparent;\n"
 "border: none;\n"
 "border-radius: 5px;\n"
 "}\n"
 "\n"
 "#daily_scrollAreaCont, #hourly_scrollAreaCont {\n"
-"background-color: transparent;\n"
+"b"
+                        "ackground-color: transparent;\n"
 "}\n"
 "\n"
 "\n"
@@ -120,13 +116,13 @@ class Ui_MainWindow(object):
 "border-right: 1px solid #fff;\n"
 "}\n"
 "\n"
-"QScrollBar::su"
-                        "b-line:horizontal {\n"
+"QScrollBar::sub-line:horizontal {\n"
 "border-left: 1px solid #fff;\n"
 "}\n"
 "\n"
 "QScrollBar::handle:horizontal {\n"
-"min-width: 20px;\n"
+"min-width: 20"
+                        "px;\n"
 "}\n"
 "\n"
 "\n"
@@ -460,10 +456,11 @@ class Ui_MainWindow(object):
         self.hourly_forecast.setObjectName(u"hourly_forecast")
         sizePolicy3.setHeightForWidth(self.hourly_forecast.sizePolicy().hasHeightForWidth())
         self.hourly_forecast.setSizePolicy(sizePolicy3)
+        self.hourly_forecast.setMinimumSize(QSize(0, 0))
         self.verticalLayout_9 = QVBoxLayout(self.hourly_forecast)
         self.verticalLayout_9.setSpacing(0)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.verticalLayout_9.setContentsMargins(-1, -1, -1, 3)
+        self.verticalLayout_9.setContentsMargins(6, 6, 6, 3)
         self.prognozDn = QLabel(self.hourly_forecast)
         self.prognozDn.setObjectName(u"prognozDn")
         sizePolicy3.setHeightForWidth(self.prognozDn.sizePolicy().hasHeightForWidth())
@@ -480,20 +477,25 @@ class Ui_MainWindow(object):
 
         self.hourly_scrollArea = QScrollArea(self.hourly_forecast)
         self.hourly_scrollArea.setObjectName(u"hourly_scrollArea")
-        sizePolicy.setHeightForWidth(self.hourly_scrollArea.sizePolicy().hasHeightForWidth())
-        self.hourly_scrollArea.setSizePolicy(sizePolicy)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.hourly_scrollArea.sizePolicy().hasHeightForWidth())
+        self.hourly_scrollArea.setSizePolicy(sizePolicy5)
+        self.hourly_scrollArea.setMinimumSize(QSize(0, 90))
+        self.hourly_scrollArea.setBaseSize(QSize(0, 0))
         self.hourly_scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.hourly_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.hourly_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.hourly_scrollArea.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.hourly_scrollArea.setWidgetResizable(True)
         self.hourly_scrollAreaCont = QWidget()
         self.hourly_scrollAreaCont.setObjectName(u"hourly_scrollAreaCont")
-        self.hourly_scrollAreaCont.setGeometry(QRect(0, 0, 580, 34))
-        sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.hourly_scrollAreaCont.sizePolicy().hasHeightForWidth())
-        self.hourly_scrollAreaCont.setSizePolicy(sizePolicy5)
+        self.hourly_scrollAreaCont.setGeometry(QRect(0, 0, 586, 90))
+        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.hourly_scrollAreaCont.sizePolicy().hasHeightForWidth())
+        self.hourly_scrollAreaCont.setSizePolicy(sizePolicy6)
         self.hourly_scrollAreaCont.setStyleSheet(u"")
         self.hourly_scrollArea.setWidget(self.hourly_scrollAreaCont)
 
@@ -509,7 +511,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_8 = QVBoxLayout(self.daily_forecast)
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(9, 9, 9, 3)
+        self.verticalLayout_8.setContentsMargins(6, 6, 6, 3)
         self.prognoz14 = QLabel(self.daily_forecast)
         self.prognoz14.setObjectName(u"prognoz14")
         sizePolicy3.setHeightForWidth(self.prognoz14.sizePolicy().hasHeightForWidth())
@@ -522,18 +524,18 @@ class Ui_MainWindow(object):
 
         self.daily_scrollArea = QScrollArea(self.daily_forecast)
         self.daily_scrollArea.setObjectName(u"daily_scrollArea")
-        sizePolicy.setHeightForWidth(self.daily_scrollArea.sizePolicy().hasHeightForWidth())
-        self.daily_scrollArea.setSizePolicy(sizePolicy)
+        sizePolicy5.setHeightForWidth(self.daily_scrollArea.sizePolicy().hasHeightForWidth())
+        self.daily_scrollArea.setSizePolicy(sizePolicy5)
         self.daily_scrollArea.setMinimumSize(QSize(0, 0))
         self.daily_scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.daily_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.daily_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.daily_scrollArea.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.daily_scrollArea.setWidgetResizable(True)
         self.daily_scrollAreaCont = QWidget()
         self.daily_scrollAreaCont.setObjectName(u"daily_scrollAreaCont")
-        self.daily_scrollAreaCont.setGeometry(QRect(0, 0, 580, 34))
-        sizePolicy5.setHeightForWidth(self.daily_scrollAreaCont.sizePolicy().hasHeightForWidth())
-        self.daily_scrollAreaCont.setSizePolicy(sizePolicy5)
+        self.daily_scrollAreaCont.setGeometry(QRect(0, 0, 586, 42))
+        sizePolicy6.setHeightForWidth(self.daily_scrollAreaCont.sizePolicy().hasHeightForWidth())
+        self.daily_scrollAreaCont.setSizePolicy(sizePolicy6)
         self.daily_scrollAreaCont.setStyleSheet(u"")
         self.daily_scrollArea.setWidget(self.daily_scrollAreaCont)
 
@@ -572,11 +574,11 @@ class Ui_MainWindow(object):
 
         self.clear = QPushButton(self.searhPanel)
         self.clear.setObjectName(u"clear")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Ignored)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.clear.sizePolicy().hasHeightForWidth())
-        self.clear.setSizePolicy(sizePolicy6)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Ignored)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.clear.sizePolicy().hasHeightForWidth())
+        self.clear.setSizePolicy(sizePolicy7)
         self.clear.setMinimumSize(QSize(30, 30))
         self.clear.setIcon(icon2)
 
@@ -584,11 +586,11 @@ class Ui_MainWindow(object):
 
         self.search = QPushButton(self.searhPanel)
         self.search.setObjectName(u"search")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.search.sizePolicy().hasHeightForWidth())
-        self.search.setSizePolicy(sizePolicy7)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.search.sizePolicy().hasHeightForWidth())
+        self.search.setSizePolicy(sizePolicy8)
         self.search.setMinimumSize(QSize(30, 30))
         icon3 = QIcon()
         icon3.addFile(u":/icons/icons/search_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)

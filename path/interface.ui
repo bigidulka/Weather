@@ -19,11 +19,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#MainWindow {
-background-image: url(:/fons/fons/stock-photo-beautiful-light-blue-sky-clouds.jpg);
-}
-
-QPushButton {
+   <string notr="true">QPushButton {
 background-color: transparent;
 border: 2px solid transparent;
 border-radius: 5px;
@@ -851,9 +847,24 @@ border: none;
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout_9">
              <property name="spacing">
               <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>6</number>
+             </property>
+             <property name="topMargin">
+              <number>6</number>
+             </property>
+             <property name="rightMargin">
+              <number>6</number>
              </property>
              <property name="bottomMargin">
               <number>3</number>
@@ -889,16 +900,28 @@ border: none;
              <item>
               <widget class="QScrollArea" name="hourly_scrollArea">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
                </property>
                <property name="verticalScrollBarPolicy">
                 <enum>Qt::ScrollBarAlwaysOff</enum>
                </property>
                <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOn</enum>
+                <enum>Qt::ScrollBarAsNeeded</enum>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -911,8 +934,8 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>580</width>
-                  <height>34</height>
+                  <width>586</width>
+                  <height>90</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">
@@ -943,13 +966,13 @@ border: none;
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>9</number>
+              <number>6</number>
              </property>
              <property name="topMargin">
-              <number>9</number>
+              <number>6</number>
              </property>
              <property name="rightMargin">
-              <number>9</number>
+              <number>6</number>
              </property>
              <property name="bottomMargin">
               <number>3</number>
@@ -985,7 +1008,7 @@ border: none;
              <item>
               <widget class="QScrollArea" name="daily_scrollArea">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -1000,7 +1023,7 @@ border: none;
                 <enum>Qt::ScrollBarAlwaysOff</enum>
                </property>
                <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOn</enum>
+                <enum>Qt::ScrollBarAsNeeded</enum>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -1013,8 +1036,8 @@ border: none;
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>580</width>
-                  <height>34</height>
+                  <width>586</width>
+                  <height>42</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">

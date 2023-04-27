@@ -20,7 +20,7 @@ class WeatherData:
                 return json_data
         except requests.exceptions.HTTPError as error:
             return f'{error}'
-
+    
     def parse_current_weather(self) -> dict:
         current_data = self.data['current']
         location_data = self.data['location']

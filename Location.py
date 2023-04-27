@@ -12,7 +12,7 @@ class Location:
     @staticmethod
     def get_coor_city(text: str) -> Optional[Tuple[float, float]]:
         location = Location.geolocator.geocode(text)
-        return (location.latitude, location.longitude)
+        return (location.latitude, location.longitude) if location else None
     
     @staticmethod
     def get_location_by_ip() -> Tuple[float, float]:

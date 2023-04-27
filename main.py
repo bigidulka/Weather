@@ -1,4 +1,5 @@
 import sys
+import datetime
 
 # my files
 from location import Location
@@ -9,7 +10,7 @@ from path.interface import Ui_MainWindow
 # pyqt6
 from PyQt6 import QtWidgets, QtCore, uic
 from PyQt6.QtCore import Qt, QEvent, QResource, QTimer
-from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel
+from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel, QSizePolicy
 from PyQt6.QtGui import QIcon, QAction, QGuiApplication, QPixmap
 
 
@@ -21,9 +22,9 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.initGUI()
 
-        self._init_(None)
+        self.initData(None)
 
-    def _init_(self, text):
+    def initData(self, text):
         coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
         self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
         
@@ -41,8 +42,9 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
                 self.ico.setPixmap(icon.scaled(100, 100))
-                
                 self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+                self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+                self.set_fon()
 
             except Exception as e:
                 print(e)
@@ -61,11 +63,29 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
-        self.search_location.clicked.connect(lambda: self._init_(None))
+        self.search_location.clicked.connect(lambda: self.initData(None))
+        
+        self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
+        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.daily_scrollArea)
+    
+    def set_fon(self):
+        localtime = datetime.datetime.strptime(self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
+        hour = localtime.hour
+        fons = {3: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg", 16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
+        for i in range(hour, hour + 24):
+            if i % 24 in fons:
+                prev_styles = self.styleSheet()
+                self.setStyleSheet(prev_styles + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }")
+                break
+       
+    def scroll_widget(self, event, scrollArea):
+        delta = event.angleDelta().y()
+        scrollArea.horizontalScrollBar().setValue(scrollArea.horizontalScrollBar().value() - delta)
+        event.accept()
 
     def searh_result(self):
         if self.searchEdit.text().strip():
-            self._init_(self.searchEdit.text().strip())
+            self.initData(self.searchEdit.text().strip())
         else:
             self.error_output(self.translation['search_empty'])
 
@@ -83,6 +103,12 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         set_error_style()
 
     def on_daily_forecast_button_clicked(self, date_str):
+        button = self.sender()
+        if button and button.objectName() == "daily_button":
+            self.prognozDn.setText(self.translation['hourly_forecast'].format(n=button.findChild(QLabel, "date_label").text()))
+        else:
+            self.prognozDn.setText(self.translation['hourly_forecast'].format(n=self.daily_forecast_but[date_str].findChild(QLabel, "date_label").text()))
+        
         hourly_forecast_fr = self.translator.parse_hourly_forecast(date_str)
 
         layout = self.hourly_scrollAreaCont.layout()

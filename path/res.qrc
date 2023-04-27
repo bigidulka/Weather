@@ -109,8 +109,13 @@
     <file>weather/64x64/night/395.png</file>
   </qresource>
   <qresource prefix="fons">
-    <file>fons/stock-photo-beautiful-light-blue-sky-clouds.jpg</file>
-    <file>fons/красивый-абстрактный-голубое-небо-фон-в-небе-пернатые-облака-хорошее-151472965.jpg</file>
-    <file>fons/sky-background-blue-sky-with-clouds-and-sunlight_62544-44.jpg</file>
+    <file>fons/1.webp</file>
+    <file>fons/2.jpg</file>
+    <file>fons/3.jpg</file>
+    <file>fons/4.jpg</file>
+    <file>fons/5.webp</file>
+    <file>fons/6.jpg</file>
+    <file>fons/7.jpg</file>
+    <file>fons/9.jpg</file>
   </qresource>
 </RCC>
