@@ -78,7 +78,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.search_location.clicked.connect(lambda: self.initData(None))
 
         self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
-        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widgeevent, self.daily_scrollArea)
+        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widge(event, self.daily_scrollArea)
 
         self.searchEdit.returnPressed.connect(lambda: self.searh_result())
 
