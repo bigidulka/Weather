@@ -1,6 +1,5 @@
 import requests
 from typing import Union
-from location import Location
 
 
 class WeatherData:

@@ -1,8 +1,8 @@
 from weatherDataWAPI import WeatherData
 from location import Location
-from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QSizePolicy
-from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import Qt, QByteArray, QSize
+from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt, QSize
 import datetime
 import calendar
 

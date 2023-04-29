@@ -8,10 +8,10 @@ from weatherDataWAPI import WeatherData
 import path.res
 from path.interface import Ui_MainWindow
 # pyqt6
-from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtCore import Qt, QEvent, QResource, QTimer
-from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QPushButton, QToolTip, QMessageBox, QFrame, QLabel, QGraphicsBlurEffect
-from PyQt6.QtGui import QIcon, QAction, QGuiApplication, QPixmap
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QHBoxLayout, QLabel
+from PyQt6.QtGui import QIcon, QPixmap
 
 
 class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -78,7 +78,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.search_location.clicked.connect(lambda: self.initData(None))
 
         self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
-        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widge(event, self.daily_scrollArea)
+        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.daily_scrollArea)
 
         self.searchEdit.returnPressed.connect(lambda: self.searh_result())
 
@@ -92,8 +92,8 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def set_fon(self):
         localtime = datetime.datetime.strptime(
             self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
-        fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg",
-                16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
+        fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 15: "7.jpg",
+                17: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
         hour = localtime.hour
 
         for i in range(hour, hour + 24):
