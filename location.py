@@ -7,7 +7,7 @@ import requests
 
 
 class Location:
-    geolocator = Nominatim(user_agent="geoapiExercises")
+    geolocator = Nominatim(user_agent="weatherapp")
 
     @staticmethod
     def get_coor_city(text: str) -> Optional[Tuple[float, float]]:

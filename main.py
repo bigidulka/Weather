@@ -25,35 +25,42 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.initData(None)
 
     def initData(self, text):
-        coordinates = Location.get_location_by_ip(
-        ) if text is None else Location.get_coor_city(text)
         self.translation = Translate.translation_from_the_front(
             WeatherApp.LANGUAGE)
+        self.searchEdit.setPlaceholderText(
+            self.translation['search_placeholder'])
 
-        if text and not coordinates:
-            self.error_output(f"'{text}': {self.translation['not_found']}")
-        else:
-            try:
-                self.weatherData = WeatherData(
-                    WeatherApp.LANGUAGE, coordinates)
-                self.translator = Translate(self.weatherData)
-                for name, value in self.translator.get_current_translation().items():
-                    widget = getattr(self, name)
-                    widget.setText(str(value)) if value else None
-                self.daily_forecast_scr()
-                self.on_daily_forecast_button_clicked(
-                    list(self.daily_forecast_but.keys())[0])
+        self.main.hide()
 
-                icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
-                    '//cdn.weatherapi.com', 'path').replace('\\', '/'))
-                self.ico.setPixmap(icon.scaled(100, 100))
-                self.searchEdit.setPlaceholderText(
-                    self.translation['search_placeholder'])
-                self.set_fon()
+        try:
+            coordinates = Location.get_location_by_ip(
+            ) if text is None else Location.get_coor_city(text)
 
-            except Exception as e:
-                print(e)
-                self.error_output(str(e))
+            if text and not coordinates:
+                self.error_output(f"'{text}': {self.translation['not_found']}")
+
+            else:
+                try:
+                    self.weatherData = WeatherData(
+                        WeatherApp.LANGUAGE, coordinates)
+                    self.translator = Translate(self.weatherData)
+                    for name, value in self.translator.get_current_translation().items():
+                        widget = getattr(self, name)
+                        widget.setText(str(value)) if value else None
+
+                    icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
+                        '//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                    self.ico.setPixmap(icon.scaled(100, 100))
+                    self.searchEdit.setPlaceholderText(
+                        self.translation['search_placeholder'])
+                    self.set_daily(self.set_fon())
+
+                    self.main.show()
+
+                except Exception as e:
+                    self.error_output(str(e))
+        except:
+            self.error_output(self.translation["no_net"])
 
     def initGUI(self):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
@@ -63,32 +70,40 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.hideBtn.clicked.connect(self.toggle_tray)
 
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(self.style().standardIcon(
-            QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
+        self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
         self.tray_icon.activated.connect(self.toggle_tray)
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
         self.search_location.clicked.connect(lambda: self.initData(None))
 
-        self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(
-            event, self.hourly_scrollArea)
-        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(
-            event, self.daily_scrollArea)
+        self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
+        self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widgeevent, self.daily_scrollArea)
 
-        self.hourly_forecast.event
+        self.searchEdit.returnPressed.connect(lambda: self.searh_result())
+
+    def set_daily(self, color: str):
+        self.daily_forecast_but = self.translator.parse_daily_forecast(color)
+
+        self.daily_forecast_scr()
+        self.on_daily_forecast_button_clicked(
+            list(self.daily_forecast_but.keys())[0])
 
     def set_fon(self):
-        localtime = datetime.datetime.strptime(self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
-        fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg",16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
+        localtime = datetime.datetime.strptime(
+            self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
+        fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 13: "7.jpg",
+                16: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
         hour = localtime.hour
-        
+
         for i in range(hour, hour + 24):
             if i % 24 in fons:
-                bg_color, font_color = ("255, 255, 255", "black") if fons[i % 24] in ["5.webp", "6.jpg", "7.jpg", "9.jpg"] else ("0, 0, 0", "white")
-                self.setStyleSheet(self.styleSheet() + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" + 
-                    "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" + 
-                    """QPushButton:hover {
+                bg_color, font_color = ("255, 255, 255", "black") if fons[i % 24] in [
+                    "5.webp", "6.jpg", "7.jpg", "9.jpg"] else ("0, 0, 0", "white")
+
+                self.setStyleSheet(self.styleSheet() + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" +
+                                   "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" +
+                                   """QPushButton:hover {
                             background-color: rgba(""" + bg_color + """, 0.3);
                         }
                         QPushButton:pressed {
@@ -108,7 +123,45 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                             background-color: rgba(""" + bg_color + """, 0.5);
                         }
                         """)
-                break
+                if font_color == "black":
+                    self.search_location.setIcon(
+                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.hideBtn.setIcon(
+                        QIcon("path/icons/remove_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.closeBtn.setIcon(
+                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.clear.setIcon(
+                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.search.setIcon(
+                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.windIco.setPixmap(
+                        QPixmap("path/icons/air_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.humIco.setPixmap(
+                        QPixmap("path/icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.pressIco.setPixmap(
+                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48.svg"))
+                    self.calendar.setPixmap(
+                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48.svg"))
+                elif font_color == "white":
+                    self.search_location.setIcon(
+                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.hideBtn.setIcon(
+                        QIcon("path/icons/remove_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.closeBtn.setIcon(
+                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.clear.setIcon(
+                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.search.setIcon(
+                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.windIco.setPixmap(
+                        QPixmap("path/icons/air_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.humIco.setPixmap(
+                        QPixmap("path/icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.pressIco.setPixmap(
+                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                    self.calendar.setPixmap(
+                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                return font_color
 
     def scroll_widget(self, event, scrollArea):
         delta = event.angleDelta().y()
@@ -159,8 +212,6 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             layout.addWidget(fr)
 
     def daily_forecast_scr(self):
-        self.daily_forecast_but = self.translator.parse_daily_forecast()
-
         for but_date, but in self.daily_forecast_but.items():
             but.clicked.connect(
                 lambda _, but_date=but_date: self.on_daily_forecast_button_clicked(but_date))

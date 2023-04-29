@@ -19,12 +19,14 @@ class Translate:
                    "forecast_several_days": "Forecast for 14 days",
                    "hourly_forecast": "Hourly forecast for {n}",
                    "not_found": "Not found",
-                   "search_empty": "Search Empty"},
+                   "search_empty": "Search Empty",
+                   "no_net": "Check your Internet connection"},
             'ru': {"search_placeholder": "Поиск",
                    "forecast_several_days": "Прогноз на 14 дней",
                    "hourly_forecast": "Почасовой прогноз на {n}",
                    "not_found": "Не найдено",
-                   "search_empty": "Строка пустая"}
+                   "search_empty": "Строка пустая",
+                   "no_net": "Проверьте подключение к интернету"}
         }
         return translations[language]
 
@@ -57,7 +59,7 @@ class Translate:
         translations = {
             'en': {
                 'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
-                'time': f"It is now {self.time_only}. Yesterday at this time {0}",
+                'time': f"It is now {self.time_only}",
                 'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
                 'condition': current_weather.get('condition:text', ''),
                 'feels_like': f"Feels like {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
@@ -67,7 +69,7 @@ class Translate:
             },
             'ru': {
                 'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
-                'time': f"Сейчас {self.time_only}. Вчера в это время {0}",
+                'time': f"Сейчас {self.time_only}",
                 'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
                 'condition': current_weather.get('condition:text', ''),
                 'feels_like': f"Ощущается как {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
@@ -78,7 +80,7 @@ class Translate:
         }
         return translations[self.language]
 
-    def parse_daily_forecast(self) -> dict:
+    def parse_daily_forecast(self, color) -> dict:
         weekdays = {
             'Monday': {'en': 'Mon', 'ru': 'Пн'},
             'Tuesday': {'en': 'Tue', 'ru': 'Вт'},
@@ -124,8 +126,10 @@ class Translate:
             info_layout.addWidget(
                 QLabel(forecast_data['condition:text'], wordWrap=True))
             button_layout.addLayout(info_layout)
-            for icon_path, text_label_data in [("path\icons\\air_FILL0_wght400_GRAD0_opsz48.svg", f"{forecast_data['maxwind_kph']}{'м/c' if self.language == 'ru' else 'm/s'}"),
-                                               ("path\icons\humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg", f"{forecast_data['avghumidity']}%")]:
+            color_air = "path\icons\\air_FILL0_wght400_GRAD0_opsz48.svg" if color == "black" else "path\icons\\air_FILL0_wght400_GRAD0_opsz48_negate.png"
+            color_hum = "path\icons\\humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg" if color == "black" else "path\icons\\humidity_percentage_FILL0_wght400_GRAD0_opsz48_negate.png"
+            for icon_path, text_label_data in [(color_air, f"{forecast_data['maxwind_kph']}{'м/c' if self.language == 'ru' else 'm/s'}"),
+                                               (color_hum, f"{forecast_data['avghumidity']}%")]:
                 hbox_layout = QHBoxLayout()
                 hbox_layout.setSpacing(0)
                 hbox_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
