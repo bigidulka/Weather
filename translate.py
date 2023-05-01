@@ -55,14 +55,20 @@ class Translate:
         city_name = result["city"]
         country_name = result["country"]
         self.time_only = result["local_time"].strftime("%H:%M")
+        temp = ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°'
+        feels_like = f"{'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°"
+        condition = current_weather.get('condition:text', '')
+        
+        self.tray_text = f"{city_name}, {self.time_only}\n{condition}, {temp}"
 
         translations = {
             'en': {
                 'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
                 'time': f"It is now {self.time_only}",
-                'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
-                'condition': current_weather.get('condition:text', ''),
-                'feels_like': f"Feels like {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
+                'temp': f"{temp}",
+                'condition': f"{condition}",
+                'feels_like': f"Feels like {feels_like}",
+                
                 'windText': f"{current_weather.get('wind_kph', '')} m/s, {current_weather.get('wind_dir', '')}",
                 'humText': f"{current_weather.get('humidity', '')}%",
                 'pressText': f"{current_weather.get('pressure_mb', '')}mmHg Art."
@@ -70,9 +76,10 @@ class Translate:
             'ru': {
                 'nameCityCountry': f"{city_name}, {country_name}" if city_name else f"{country_name}",
                 'time': f"Сейчас {self.time_only}",
-                'temp': ('+' if float(current_weather.get('temp_c', 0)) > 0 else '') + str(current_weather.get('temp_c', '')) + '°',
-                'condition': current_weather.get('condition:text', ''),
-                'feels_like': f"Ощущается как {'+' if float(current_weather.get('feelslike_c', 0)) > 0 else ''}{current_weather.get('feelslike_c', '')}°",
+                'temp': f"{temp}",
+                'condition': f"{condition}",
+                'feels_like': f"Ощущается как {feels_like}",
+                
                 'windText': f"{current_weather.get('wind_kph', '')}м/c, {wind_directions.get(current_weather.get('wind_dir', ''), '')}",
                 'humText': f"{current_weather.get('humidity', '')}%",
                 'pressText': f"{current_weather.get('pressure_mb', '')}ммРт. ст."
@@ -98,33 +105,28 @@ class Translate:
         self.daily_forecast = self.data_dict.parse_daily_forecast()
         forecast_buttons = {}
         for idx, forecast_data in enumerate(self.daily_forecast):
-            date_obj = datetime.datetime.strptime(
-                forecast_data['date'], '%Y-%m-%d')
+            date_obj = datetime.datetime.strptime(forecast_data['date'], '%Y-%m-%d')
             weekday_str = weekdays[date_obj.strftime('%A')][self.language] if idx > 0 else "Сегодня" if self.language == 'ru' else 'Today'
             month_str = months[self.language][date_obj.month]
             day_str = date_obj.day
             maxtemp_str = f"{'Макс' if self.language == 'ru' else 'Max'} {forecast_data['maxtemp_c']}°"
             mintemp_str = f"{'Мин' if self.language == 'ru' else 'Min'} {forecast_data['mintemp_c']}°"
-            button = QPushButton(styleSheet="font-family: 'Verdana';",
-                                 objectName="daily_button", minimumSize=QSize(170, 125))
+            button = QPushButton(styleSheet="font-family: 'Verdana';",objectName="daily_button", minimumSize=QSize(170, 125))
             button_layout = QHBoxLayout(button)
             icon_layout = QVBoxLayout()
-            icon_label = QLabel(pixmap=QPixmap(forecast_data['condition:icon'].replace(
-                '//cdn.weatherapi.com', 'path').replace('\\', '/')))
+            icon_label = QLabel(pixmap=QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/')))
             icon_layout.addWidget(icon_label)
             button_layout.addLayout(icon_layout)
-            separator = QFrame(
-                styleSheet="background-color: rgba(255, 255, 255, 0.3);", objectName="separator")
+            separator = QFrame(styleSheet="background-color: rgba(255, 255, 255, 0.3);", objectName="separator")
             separator.setFrameShape(QFrame.Shape.VLine)
             separator.setMaximumWidth(1)
             button_layout.addWidget(separator)
             info_layout = QVBoxLayout()
-            date_label = QLabel(f"<b>{weekday_str}, {day_str} {month_str}</b>", objectName="date_label")
+            date_label = QLabel(f"<b>{weekday_str}, {day_str} {month_str}</b>", objectName="date_label", wordWrap=True)
             info_layout.addWidget(date_label)
             info_layout.addWidget(QLabel(maxtemp_str))
             info_layout.addWidget(QLabel(mintemp_str))
-            info_layout.addWidget(
-                QLabel(forecast_data['condition:text'], wordWrap=True))
+            info_layout.addWidget(QLabel(forecast_data['condition:text'], wordWrap=True))
             button_layout.addLayout(info_layout)
             color_air = "path\icons\\air_FILL0_wght400_GRAD0_opsz48.svg" if color == "black" else "path\icons\\air_FILL0_wght400_GRAD0_opsz48_negate.png"
             color_hum = "path\icons\\humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg" if color == "black" else "path\icons\\humidity_percentage_FILL0_wght400_GRAD0_opsz48_negate.png"
@@ -133,10 +135,8 @@ class Translate:
                 hbox_layout = QHBoxLayout()
                 hbox_layout.setSpacing(0)
                 hbox_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-                hbox_layout.addWidget(QLabel(pixmap=QPixmap(icon_path).scaled(
-                    20, 20), alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
-                hbox_layout.addWidget(QLabel(
-                    text_label_data, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
+                hbox_layout.addWidget(QLabel(pixmap=QPixmap(icon_path).scaled(20, 20), alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
+                hbox_layout.addWidget(QLabel(text_label_data, alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter))
                 icon_layout.addLayout(hbox_layout)
             forecast_buttons[forecast_data['date']] = button
         return forecast_buttons
@@ -148,29 +148,20 @@ class Translate:
             hour = int(forecast_data['time'][-5:-3])
             if hour >= int(self.time_only[:2]) and self.daily_forecast[0]['date'] == date_str or self.daily_forecast[0]['date'] != date_str:
                 frame = QFrame(objectName="h_scr_fr")
-                frame.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+                frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
                 layout = QVBoxLayout()
                 frame.setLayout(layout)
-                frame.setStyleSheet(
-                    '#h_scr_fr:hover {background-color:rgba(255, 255, 255, 0.5);} QLabel { font-family: "Verdana"; }')
-                icon = QPixmap(forecast_data['condition:icon'].replace(
-                    '//cdn.weatherapi.com', 'path').replace('\\', '/'))
-                icon_label = QLabel()
-                icon_label.setPixmap(icon.scaled(
-                    icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))
-                icon_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+                frame.setStyleSheet('#h_scr_fr:hover {background-color:rgba(255, 255, 255, 0.5);} QLabel { font-family: "Verdana"; }')
+                icon = QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                icon_label = QLabel(alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignRight)
+                icon_label.setPixmap(icon.scaled(icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))
                 text_layout = QVBoxLayout()
-                time_label = QLabel(forecast_data['time'][-5:])
-                time_label.setAlignment(Qt.AlignmentFlag.AlignBottom)
+                time_label = QLabel(forecast_data['time'][-5:], alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)
                 text_layout.addWidget(time_label)
-                condition_label = QLabel(
-                    ('+' if float(forecast_data['temp_c']) > 0 else '') + str(forecast_data['temp_c']) + '°')
-                condition_label.setObjectName('')
-                condition_label.setAlignment(Qt.AlignmentFlag.AlignTop)
+                condition_label = QLabel(('+' if float(forecast_data['temp_c']) > 0 else '') + str(forecast_data['temp_c']) + '°', alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
                 condition_label.setWordWrap(True)
                 text_layout.addWidget(condition_label)
-                condition_label.setStyleSheet(
-                    'font-weight: bold;  font-family: "Verdana";')
+                condition_label.setStyleSheet('font-weight: bold;  font-family: "Verdana";')
                 icon_and_text_layout = QHBoxLayout()
                 icon_and_text_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
                 icon_and_text_layout.addWidget(icon_label)

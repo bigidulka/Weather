@@ -25,39 +25,37 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.initData(None)
 
     def initData(self, text):
-        self.translation = Translate.translation_from_the_front(
-            WeatherApp.LANGUAGE)
-        self.searchEdit.setPlaceholderText(
-            self.translation['search_placeholder'])
+        self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
+        self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
 
         self.main.hide()
 
         try:
-            coordinates = Location.get_location_by_ip(
-            ) if text is None else Location.get_coor_city(text)
+            coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
 
             if text and not coordinates:
                 self.error_output(f"'{text}': {self.translation['not_found']}")
 
             else:
                 try:
-                    self.weatherData = WeatherData(
-                        WeatherApp.LANGUAGE, coordinates)
+                    self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
                     self.translator = Translate(self.weatherData)
+                    
                     for name, value in self.translator.get_current_translation().items():
                         widget = getattr(self, name)
                         widget.setText(str(value)) if value else None
 
-                    icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace(
-                        '//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                    icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
                     self.ico.setPixmap(icon.scaled(100, 100))
-                    self.searchEdit.setPlaceholderText(
-                        self.translation['search_placeholder'])
+                    self.tray_icon.setIcon(QIcon(icon))
+                    self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+                    self.tray_icon.setToolTip(self.translator.tray_text)
                     self.set_daily(self.set_fon())
 
                     self.main.show()
 
                 except Exception as e:
+                    print(e)
                     self.error_output(str(e))
         except:
             self.error_output(self.translation["no_net"])
@@ -70,7 +68,6 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.hideBtn.clicked.connect(self.toggle_tray)
 
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(self.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_DialogApplyButton))
         self.tray_icon.activated.connect(self.toggle_tray)
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
@@ -93,7 +90,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         localtime = datetime.datetime.strptime(
             self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
         fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 15: "7.jpg",
-                17: "9.jpg", 19: "3.jpg", 21: "2.jpg", 23: "1.webp"}
+                17: "9.jpg", 20: "3.jpg", 22: "2.jpg", 2: "1.webp"}
         hour = localtime.hour
 
         for i in range(hour, hour + 24):
@@ -101,9 +98,11 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 bg_color, font_color = ("255, 255, 255", "black") if fons[i % 24] in [
                     "5.webp", "6.jpg", "7.jpg", "9.jpg"] else ("0, 0, 0", "white")
 
-                self.setStyleSheet(self.styleSheet() + "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" +
-                                   "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" +
-                                   """QPushButton:hover {
+                self.setStyleSheet(self.styleSheet() + 
+                        "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" +
+                        "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" +
+                        
+                        """QPushButton:hover {
                             background-color: rgba(""" + bg_color + """, 0.3);
                         }
                         QPushButton:pressed {
@@ -123,44 +122,30 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                             background-color: rgba(""" + bg_color + """, 0.5);
                         }
                         """)
-                if font_color == "black":
-                    self.search_location.setIcon(
-                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.hideBtn.setIcon(
-                        QIcon("path/icons/remove_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.closeBtn.setIcon(
-                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.clear.setIcon(
-                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.search.setIcon(
-                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.windIco.setPixmap(
-                        QPixmap("path/icons/air_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.humIco.setPixmap(
-                        QPixmap("path/icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.pressIco.setPixmap(
-                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48.svg"))
-                    self.calendar.setPixmap(
-                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48.svg"))
-                elif font_color == "white":
-                    self.search_location.setIcon(
-                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.hideBtn.setIcon(
-                        QIcon("path/icons/remove_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.closeBtn.setIcon(
-                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.clear.setIcon(
-                        QIcon("path/icons/close_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.search.setIcon(
-                        QIcon("path/icons/search_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.windIco.setPixmap(
-                        QPixmap("path/icons/air_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.humIco.setPixmap(
-                        QPixmap("path/icons/humidity_percentage_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.pressIco.setPixmap(
-                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48_negate.png"))
-                    self.calendar.setPixmap(
-                        QPixmap("path/icons/compress_FILL0_wght400_GRAD0_opsz48_negate.png"))
+                
+                ICON_PATH = "path/icons/"
+                ICONS = {
+                    "search_location": "search_FILL0_wght400_GRAD0_opsz48",
+                    "hideBtn": "remove_FILL0_wght400_GRAD0_opsz48",
+                    "closeBtn": "close_FILL0_wght400_GRAD0_opsz48",
+                    "clear": "close_FILL0_wght400_GRAD0_opsz48",
+                    "search": "search_FILL0_wght400_GRAD0_opsz48",
+                    
+                    "windIco": "air_FILL0_wght400_GRAD0_opsz48",
+                    "humIco": "humidity_percentage_FILL0_wght400_GRAD0_opsz48",
+                    "pressIco": "compress_FILL0_wght400_GRAD0_opsz48",
+                    "calendar": "compress_FILL0_wght400_GRAD0_opsz48"
+                }
+
+                icon_ext = "png" if font_color == "white" else "svg"
+                icon_suffix = "_negate" if font_color == "white" else ""
+                for icon_name, icon_value in ICONS.items():
+                    icon_path = ICON_PATH + icon_value + icon_suffix + "." + icon_ext
+                    icon = QIcon(icon_path)
+                    if icon_name in ["windIco", "pressIco", "calendar", "humIco"]:
+                        getattr(self, icon_name).setPixmap(QPixmap(icon_path))
+                    else:
+                        getattr(self, icon_name).setIcon(icon)
                 return font_color
 
     def scroll_widget(self, event, scrollArea):
