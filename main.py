@@ -90,7 +90,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         localtime = datetime.datetime.strptime(
             self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
         fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 15: "7.jpg",
-                17: "9.jpg", 20: "3.jpg", 22: "2.jpg", 2: "1.webp"}
+                17: "9.jpg", 22: "3.jpg", 3: "2.jpg"}
         hour = localtime.hour
 
         for i in range(hour, hour + 24):
@@ -134,7 +134,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     "windIco": "air_FILL0_wght400_GRAD0_opsz48",
                     "humIco": "humidity_percentage_FILL0_wght400_GRAD0_opsz48",
                     "pressIco": "compress_FILL0_wght400_GRAD0_opsz48",
-                    "calendar": "compress_FILL0_wght400_GRAD0_opsz48"
+                    "calendar": "calendar_month_FILL0_wght400_GRAD0_opsz48"
                 }
 
                 icon_ext = "png" if font_color == "white" else "svg"
