@@ -13,7 +13,6 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QHBoxLayout, QLabel
 from PyQt6.QtGui import QIcon, QPixmap
 
-
 class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     LANGUAGE = 'ru'
 
@@ -22,16 +21,25 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.initGUI()
 
-        self.initData(None)
+        self.initData(None, None)
 
-    def initData(self, text):
+    def toggleLanguage(self):
+        WeatherApp.LANGUAGE = 'en' if WeatherApp.LANGUAGE == 'ru' else 'ru'
+
+        search_text = self.searchEdit.text()
+        weather_data = getattr(self, 'weatherData', None)
+        coordinates = weather_data.coordinates if weather_data else None
+        self.initData(search_text, coordinates)
+
+    def initData(self, text, coordinates):
         self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
         self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
 
         self.main.hide()
 
         try:
-            coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
+            if not coordinates:
+                coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
 
             if text and not coordinates:
                 self.error_output(f"'{text}': {self.translation['not_found']}")
@@ -51,6 +59,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
                     self.tray_icon.setToolTip(self.translator.tray_text)
                     self.set_daily(self.set_fon())
+                    self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
 
                     self.main.show()
 
@@ -64,6 +73,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
 
+        self.languageButton.clicked.connect(self.toggleLanguage)
         self.closeBtn.clicked.connect(QtWidgets.QApplication.instance().quit)
         self.hideBtn.clicked.connect(self.toggle_tray)
 
@@ -72,7 +82,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
-        self.search_location.clicked.connect(lambda: self.initData(None))
+        self.search_location.clicked.connect(lambda: self.initData(None, None))
 
         self.hourly_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.hourly_scrollArea)
         self.daily_scrollArea.wheelEvent = lambda event: self.scroll_widget(event, self.daily_scrollArea)
@@ -81,10 +91,8 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def set_daily(self, color: str):
         self.daily_forecast_but = self.translator.parse_daily_forecast(color)
-
         self.daily_forecast_scr()
-        self.on_daily_forecast_button_clicked(
-            list(self.daily_forecast_but.keys())[0])
+        self.on_daily_forecast_button_clicked(list(self.daily_forecast_but.keys())[0])
 
     def set_fon(self):
         localtime = datetime.datetime.strptime(
@@ -98,30 +106,14 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 bg_color, font_color = ("255, 255, 255", "black") if fons[i % 24] in [
                     "5.webp", "6.jpg", "7.jpg", "9.jpg"] else ("0, 0, 0", "white")
 
-                self.setStyleSheet(self.styleSheet() + 
-                        "#MainWindow { background-image: url(:/fons/fons/" + fons[i % 24] + "); }" +
-                        "QLabel { color: " + font_color + "; }" + "QLineEdit {color: " + font_color + "; }" +
-                        
-                        """QPushButton:hover {
-                            background-color: rgba(""" + bg_color + """, 0.3);
-                        }
-                        QPushButton:pressed {
-                            background-color: rgba(""" + bg_color + """, 0.5);
-                        }
-                        #hourly_forecast,  #daily_forecast, #searhPanel {
-                            border-radius: 5px;
-                            background-color:  rgba(""" + bg_color + """, 0.5);
-                            padding: 5px;
-                        }
-                        QScrollBar::handle {
-                            background-color: rgba(""" + bg_color + """, 0.3);
-                            border-radius: 3px;
-                            border: none;
-                        }
-                        QScrollBar::handle:hover, QScrollBar::handle:pressed {
-                            background-color: rgba(""" + bg_color + """, 0.5);
-                        }
-                        """)
+                self.setStyleSheet(f"{self.styleSheet()} \
+                    #MainWindow {{ background-image: url(:/fons/fons/{fons[i % 24]}); }} \
+                    QLabel {{ color: {font_color}; }} QLineEdit {{ color: {font_color}; }} \
+                    QPushButton:hover {{ background-color: rgba({bg_color}, 0.3); }} \
+                    QPushButton:pressed {{ background-color: rgba({bg_color}, 0.5); }} \
+                    #hourly_forecast, #daily_forecast, #searhPanel {{ border-radius: 5px; \
+                        background-color: rgba({bg_color}, 0.5); padding: 5px; }} \
+                    QScrollBar::handle {{ background-color: rgba({bg_color}, 0.8); }}")
                 
                 ICON_PATH = "path/icons/"
                 ICONS = {
@@ -156,7 +148,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def searh_result(self):
         if self.searchEdit.text().strip():
-            self.initData(self.searchEdit.text().strip())
+            self.initData(self.searchEdit.text().strip(), None)
         else:
             self.error_output(self.translation['search_empty'])
 

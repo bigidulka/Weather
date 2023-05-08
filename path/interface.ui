@@ -233,6 +233,13 @@ border: none;
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="languageButton">
+         <property name="text">
+          <string>language</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="hideBtn">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1091,7 +1098,7 @@ border: none;
                   <x>0</x>
                   <y>0</y>
                   <width>583</width>
-                  <height>50</height>
+                  <height>42</height>
                  </rect>
                 </property>
                 <property name="sizePolicy">

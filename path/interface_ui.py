@@ -172,6 +172,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.error)
 
+        self.languageButton = QPushButton(self.title)
+        self.languageButton.setObjectName(u"languageButton")
+
+        self.horizontalLayout.addWidget(self.languageButton)
+
         self.hideBtn = QPushButton(self.title)
         self.hideBtn.setObjectName(u"hideBtn")
         sizePolicy.setHeightForWidth(self.hideBtn.sizePolicy().hasHeightForWidth())
@@ -546,7 +551,7 @@ class Ui_MainWindow(object):
         self.daily_scrollArea.setWidgetResizable(True)
         self.daily_scrollAreaCont = QWidget()
         self.daily_scrollAreaCont.setObjectName(u"daily_scrollAreaCont")
-        self.daily_scrollAreaCont.setGeometry(QRect(0, 0, 583, 50))
+        self.daily_scrollAreaCont.setGeometry(QRect(0, 0, 583, 42))
         sizePolicy5.setHeightForWidth(self.daily_scrollAreaCont.sizePolicy().hasHeightForWidth())
         self.daily_scrollAreaCont.setSizePolicy(sizePolicy5)
         self.daily_scrollAreaCont.setStyleSheet(u"")
@@ -627,6 +632,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.search_location.setText("")
         self.error.setText("")
+        self.languageButton.setText(QCoreApplication.translate("MainWindow", u"language", None))
         self.hideBtn.setText("")
         self.closeBtn.setText("")
         self.nameCityCountry.setText(QCoreApplication.translate("MainWindow", u"\u041c\u0438\u043a\u0440\u043e\u0440\u0430\u0439\u043e\u043d \u0417\u0430\u0432\u043e\u0434\u0430 1 \u041c\u0430\u044f, \u041a\u0438\u0440\u043e\u0432", None))

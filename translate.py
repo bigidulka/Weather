@@ -16,13 +16,13 @@ class Translate:
     def translation_from_the_front(language):
         translations = {
             'en': {"search_placeholder": "Search",
-                   "forecast_several_days": "Forecast for 14 days",
+                   "forecast_several_days": "Forecast for {n} days",
                    "hourly_forecast": "Hourly forecast for {n}",
                    "not_found": "Not found",
                    "search_empty": "Search Empty",
                    "no_net": "Check your Internet connection"},
             'ru': {"search_placeholder": "Поиск",
-                   "forecast_several_days": "Прогноз на 14 дней",
+                   "forecast_several_days": "Прогноз на {n} дней",
                    "hourly_forecast": "Почасовой прогноз на {n}",
                    "not_found": "Не найдено",
                    "search_empty": "Строка пустая",
