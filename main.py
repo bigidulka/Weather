@@ -26,7 +26,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def toggleLanguage(self):
         WeatherApp.LANGUAGE = 'en' if WeatherApp.LANGUAGE == 'ru' else 'ru'
 
-        search_text = self.searchEdit.text()
+        search_text = self.searchEdit.text() if self.searchEdit.text() else None
         weather_data = getattr(self, 'weatherData', None)
         coordinates = weather_data.coordinates if weather_data else None
         self.initData(search_text, coordinates)
@@ -49,22 +49,24 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
                     self.translator = Translate(self.weatherData)
                     
-                    for name, value in self.translator.get_current_translation().items():
-                        widget = getattr(self, name)
-                        widget.setText(str(value)) if value else None
+                    if isinstance(self.weatherData.data, dict):
+                        for name, value in self.translator.get_current_translation().items():
+                            widget = getattr(self, name)
+                            widget.setText(str(value)) if value else None
 
-                    icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
-                    self.ico.setPixmap(icon.scaled(100, 100))
-                    self.tray_icon.setIcon(QIcon(icon))
-                    self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
-                    self.tray_icon.setToolTip(self.translator.tray_text)
-                    self.set_daily(self.set_fon())
-                    self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+                        icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                        self.ico.setPixmap(icon.scaled(100, 100))
+                        self.tray_icon.setIcon(QIcon(icon))
+                        self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+                        self.tray_icon.setToolTip(self.translator.tray_text)
+                        self.set_daily(self.set_fon())
+                        self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
 
-                    self.main.show()
-
+                        self.main.show()
+                    else:
+                        self.error_output(self.translator.get_error_text(WeatherApp.LANGUAGE, self.weatherData.data[self.weatherData.data.find('http'):]))
+                    
                 except Exception as e:
-                    print(e)
                     self.error_output(str(e))
         except:
             self.error_output(self.translation["no_net"])
@@ -122,6 +124,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     "closeBtn": "close_FILL0_wght400_GRAD0_opsz48",
                     "clear": "close_FILL0_wght400_GRAD0_opsz48",
                     "search": "search_FILL0_wght400_GRAD0_opsz48",
+                    "languageButton": "translate_FILL0_wght400_GRAD0_opsz48",
                     
                     "windIco": "air_FILL0_wght400_GRAD0_opsz48",
                     "humIco": "humidity_percentage_FILL0_wght400_GRAD0_opsz48",
@@ -153,6 +156,8 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.error_output(self.translation['search_empty'])
 
     def error_output(self, text):
+        print(text)
+        
         timer = QTimer(self)
 
         def set_error_style():

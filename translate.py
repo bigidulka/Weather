@@ -5,6 +5,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QSize
 import datetime
 import calendar
+import requests
 
 class Translate:
     def __init__(self, data_dict: WeatherData) -> None:
@@ -12,6 +13,31 @@ class Translate:
         self.coordinates = data_dict.coordinates
         self.data_dict = data_dict
 
+    @staticmethod
+    def get_error_text(language, url):
+        error_messages = {
+            "en": {
+                1005: "API request url is invalid",
+                1006: "No location found",
+                2006: "API key provided is invalid",
+                2007: "API key has exceeded calls per month quota",
+                2008: "API key has been disabled",
+                2009: "API key does not have access to the resource",
+                9999: "Internal servor error"
+            },
+            "ru": {
+                1005: "Неверный URL API запроса",
+                1006: "Не найдено местоположение",
+                2006: "Предоставленный ключ API недействителен",
+                2007: "Ключ API превысил квоту вызовов в месяц",
+                2008: "Ключ API отключен",
+                2009: "Ключ API не имеет доступа к ресурсу",
+                9999: "Внутренняя ошибка сервера"
+            }
+        }
+        
+        return error_messages[language][requests.get(url).json()["error"]["code"]]
+    
     @staticmethod
     def translation_from_the_front(language):
         translations = {

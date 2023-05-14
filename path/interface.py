@@ -159,6 +159,12 @@ class Ui_MainWindow(object):
         self.error.setObjectName("error")
         self.horizontalLayout.addWidget(self.error)
         self.languageButton = QtWidgets.QPushButton(self.title)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.languageButton.sizePolicy().hasHeightForWidth())
+        self.languageButton.setSizePolicy(sizePolicy)
+        self.languageButton.setText("")
         self.languageButton.setObjectName("languageButton")
         self.horizontalLayout.addWidget(self.languageButton)
         self.hideBtn = QtWidgets.QPushButton(self.title)
@@ -635,7 +641,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.languageButton.setText(_translate("MainWindow", "language"))
         self.nameCityCountry.setText(_translate("MainWindow", "Микрорайон Завода 1 Мая, Киров"))
         self.time.setText(_translate("MainWindow", "Сейчас 12:53. Вчера в это время 6"))
         self.temp.setText(_translate("MainWindow", "6°"))
