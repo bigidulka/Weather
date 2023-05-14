@@ -1,7 +1,11 @@
-This is Weather App create by using Weather API, PyQt6 and other lib
+## Weather App
 
-to load lib use:
-pip3 install -r requirements.txt
+This is a Weather App created using the Weather API, PyQt6, and other libraries.
 
-build:
-main.py
+### Installation
+
+To install the required libraries, run the following command:
+
+### Build
+
+To build the application, run the `main.py` file.
