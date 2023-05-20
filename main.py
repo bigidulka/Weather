@@ -11,7 +11,7 @@ from path.interface import Ui_MainWindow
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QHBoxLayout, QLabel
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtGui import QIcon, QPixmap, QWheelEvent
 
 class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     LANGUAGE = 'ru'
@@ -59,7 +59,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.tray_icon.setIcon(QIcon(icon))
                         self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
                         self.tray_icon.setToolTip(self.translator.tray_text)
-                        self.set_daily(self.set_fon())
+                        self.set_daily(self.set_fon_icons())
                         self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
 
                         self.main.show()
@@ -96,7 +96,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.daily_forecast_scr()
         self.on_daily_forecast_button_clicked(list(self.daily_forecast_but.keys())[0])
 
-    def set_fon(self):
+    def set_fon_icons(self):
         localtime = datetime.datetime.strptime(
             self.weatherData.data['location']['localtime'], '%Y-%m-%d %H:%M')
         fons = {4: "4.jpg", 6: "5.webp", 10: "6.jpg", 15: "7.jpg",
@@ -144,10 +144,14 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 return font_color
 
     def scroll_widget(self, event, scrollArea):
-        delta = event.angleDelta().y()
-        scrollArea.horizontalScrollBar().setValue(
-            scrollArea.horizontalScrollBar().value() - delta)
-        event.accept()
+        if event.angleDelta().y() != 0:
+            delta = event.angleDelta().y()
+            scrollArea.horizontalScrollBar().setValue(scrollArea.horizontalScrollBar().value() - delta)
+            event.accept()
+        elif event.angleDelta().x() != 0:
+            delta = event.angleDelta().x()
+            scrollArea.horizontalScrollBar().setValue(scrollArea.horizontalScrollBar().value() - delta)
+            event.accept()
 
     def searh_result(self):
         if self.searchEdit.text().strip():
