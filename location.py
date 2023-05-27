@@ -22,12 +22,10 @@ class Location:
 
     @staticmethod
     def get_name_time(coordinates: Tuple[float, float], language: str) -> dict:
-        reverse = Location.geolocator.reverse
-        location = reverse(
+        location = Location.geolocator.reverse(
             f"{coordinates[0]}, {coordinates[1]}", language=language)
-
         return {
-            "city": location.raw['address'].get('town') or location.raw['address'].get('city'),
+            "city": location.raw['address'].get('town') or location.raw['address'].get('city') or location.raw['address'].get('county'),
             "country": location.raw['address'].get('country'),
             "local_time": datetime.datetime.now(pytz.timezone(TimezoneFinder().timezone_at(lng=coordinates[1], lat=coordinates[0]))),
         }

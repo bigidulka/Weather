@@ -1,2 +1,4 @@
 __pycache__/
 path/__pycache__/
+path\res.qrc
+path\interface.ui
