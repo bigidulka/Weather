@@ -2,5 +2,4 @@ PyQt6
 geopy
 pytz
 timezonefinder
-calendar
 requests
