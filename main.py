@@ -119,7 +119,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 
                 ICON_PATH = "path/icons/"
                 ICONS = {
-                    "search_location": "search_FILL0_wght400_GRAD0_opsz48",
+                    "search_location": "near_me_FILL0_wght400_GRAD0_opsz48",
                     "hideBtn": "remove_FILL0_wght400_GRAD0_opsz48",
                     "closeBtn": "close_FILL0_wght400_GRAD0_opsz48",
                     "clear": "close_FILL0_wght400_GRAD0_opsz48",
