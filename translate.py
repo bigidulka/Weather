@@ -46,13 +46,15 @@ class Translate:
                    "hourly_forecast": "Hourly forecast for {n}",
                    "not_found": "Not found",
                    "search_empty": "Search Empty",
-                   "no_net": "Check your Internet connection"},
+                   "no_net": "Check your Internet connection",
+                    "name_app": "Forecast Weather"},
             'ru': {"search_placeholder": "Поиск",
                    "forecast_several_days": "Прогноз на {n} дней",
                    "hourly_forecast": "Почасовой прогноз на {n}",
                    "not_found": "Не найдено",
                    "search_empty": "Строка пустая",
-                   "no_net": "Проверьте подключение к интернету"}
+                   "no_net": "Проверьте подключение к интернету",
+                   "name_app": "Прогноз погоды"}
         }
         return translations[language]
 

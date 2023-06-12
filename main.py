@@ -77,6 +77,8 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
                             self.tray_icon.setToolTip(self.translator.tray_text)
                             self.set_daily(self.set_fon_icons())
                             self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+                            self.setWindowTitle(self.translation['name_app'])
+                            
 
                             self.main.show()
                         else:
@@ -90,7 +92,6 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
             QTimer.singleShot(500, lambda: self.enable_button('init_data'))
 
     def initGUI(self):
-        self.setWindowTitle("Прогноз погоды")
         self.setWindowIcon(QIcon("path\icons\cloud.ico"))
         
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
