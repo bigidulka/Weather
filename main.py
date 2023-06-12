@@ -11,7 +11,7 @@ from path.interface import Ui_MainWindow
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QSystemTrayIcon, QApplication, QWidget, QHBoxLayout, QLabel
-from PyQt6.QtGui import QIcon, QPixmap, QWheelEvent
+from PyQt6.QtGui import QIcon, QPixmap
 
 class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
     LANGUAGE = 'ru'
@@ -21,57 +21,78 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.initGUI()
 
+        self.toggle_language_enabled = True
+        self.init_data_enabled = True
+
         self.initData(None, None)
 
-    def toggleLanguage(self):
-        WeatherApp.LANGUAGE = 'en' if WeatherApp.LANGUAGE == 'ru' else 'ru'
+    def enable_button(self, button_name):
+        if button_name == 'toggle_language':
+            self.toggle_language_enabled = True
+        elif button_name == 'init_data':
+            self.init_data_enabled = True
 
-        search_text = self.searchEdit.text() if self.searchEdit.text() else None
-        weather_data = getattr(self, 'weatherData', None)
-        coordinates = weather_data.coordinates if weather_data else None
-        self.initData(search_text, coordinates)
+    def toggleLanguage(self):
+        if self.toggle_language_enabled:
+            self.toggle_language_enabled = False
+
+            WeatherApp.LANGUAGE = 'en' if WeatherApp.LANGUAGE == 'ru' else 'ru'
+
+            search_text = self.searchEdit.text() if self.searchEdit.text() else None
+            weather_data = getattr(self, 'weatherData', None)
+            coordinates = weather_data.coordinates if weather_data else None
+            self.initData(search_text, coordinates)
+
+            QTimer.singleShot(500, lambda: self.enable_button('toggle_language'))
 
     def initData(self, text, coordinates):
-        self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
-        self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+        if self.init_data_enabled:
+            self.init_data_enabled = False
 
-        self.main.hide()
+            self.translation = Translate.translation_from_the_front(WeatherApp.LANGUAGE)
+            self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
 
-        try:
-            if not coordinates:
-                coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
+            self.main.hide()
 
-            if text and not coordinates:
-                self.error_output(f"'{text}': {self.translation['not_found']}")
+            try:
+                if not coordinates:
+                    coordinates = Location.get_location_by_ip() if text is None else Location.get_coor_city(text)
 
-            else:
-                try:
-                    self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
-                    self.translator = Translate(self.weatherData)
-                    
-                    if isinstance(self.weatherData.data, dict):
-                        for name, value in self.translator.get_current_translation().items():
-                            widget = getattr(self, name)
-                            widget.setText(str(value)) if value else None
+                if text and not coordinates:
+                    self.error_output(f"'{text}': {self.translation['not_found']}")
 
-                        icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
-                        self.ico.setPixmap(icon.scaled(100, 100))
-                        self.tray_icon.setIcon(QIcon(icon))
-                        self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
-                        self.tray_icon.setToolTip(self.translator.tray_text)
-                        self.set_daily(self.set_fon_icons())
-                        self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+                else:
+                    try:
+                        self.weatherData = WeatherData(WeatherApp.LANGUAGE, coordinates)
+                        self.translator = Translate(self.weatherData)
 
-                        self.main.show()
-                    else:
-                        self.error_output(self.translator.get_error_text(WeatherApp.LANGUAGE, self.weatherData.data[self.weatherData.data.find('http'):]))
-                    
-                except Exception as e:
-                    self.error_output(str(e))
-        except:
-            self.error_output(self.translation["no_net"])
+                        if isinstance(self.weatherData.data, dict):
+                            for name, value in self.translator.get_current_translation().items():
+                                widget = getattr(self, name)
+                                widget.setText(str(value)) if value else None
+
+                            icon = QPixmap(self.weatherData.data['current']['condition']['icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
+                            self.ico.setPixmap(icon.scaled(100, 100))
+                            self.searchEdit.setPlaceholderText(self.translation['search_placeholder'])
+                            self.tray_icon.setToolTip(self.translator.tray_text)
+                            self.set_daily(self.set_fon_icons())
+                            self.prognoz14.setText(self.translation['forecast_several_days'].format(n=len(self.daily_forecast_but)))
+
+                            self.main.show()
+                        else:
+                            self.error_output(self.translator.get_error_text(WeatherApp.LANGUAGE, self.weatherData.data[self.weatherData.data.find('http'):]))
+
+                    except Exception as e:
+                        self.error_output(str(e))
+            except:
+                self.error_output(self.translation["no_net"])
+
+            QTimer.singleShot(500, lambda: self.enable_button('init_data'))
 
     def initGUI(self):
+        self.setWindowTitle("Прогноз погоды")
+        self.setWindowIcon(QIcon(QPixmap("path\icons\cloud.png")))
+        
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
 
@@ -81,6 +102,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.activated.connect(self.toggle_tray)
+        self.tray_icon.setIcon(QIcon(QPixmap("path\icons\cloud.png")))
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())

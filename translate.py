@@ -177,7 +177,7 @@ class Translate:
                 frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
                 layout = QVBoxLayout()
                 frame.setLayout(layout)
-                frame.setStyleSheet('#h_scr_fr:hover {background-color:rgba(255, 255, 255, 0.5);} QLabel { font-family: "Verdana"; }')
+                # frame.setStyleSheet('#h_scr_fr:hover {background-color:rgba(255, 255, 255, 0.5);} QLabel { font-family: "Verdana"; }')
                 icon = QPixmap(forecast_data['condition:icon'].replace('//cdn.weatherapi.com', 'path').replace('\\', '/'))
                 icon_label = QLabel(alignment=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignRight)
                 icon_label.setPixmap(icon.scaled(icon.width(), 45, Qt.AspectRatioMode.KeepAspectRatio))

@@ -3,7 +3,8 @@ from typing import Union
 
 
 class WeatherData:
-    API_KEY = '487da948423c4322b24221408231703'
+    with open('api_key.txt', 'r') as file:
+        API_KEY = file.read().strip() 
 
     def __init__(self, language: str, coordinates: tuple) -> None:
         self.coordinates = coordinates
