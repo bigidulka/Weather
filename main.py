@@ -91,7 +91,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def initGUI(self):
         self.setWindowTitle("Прогноз погоды")
-        self.setWindowIcon(QIcon(QPixmap("path\icons\cloud.png")))
+        self.setWindowIcon(QIcon("path\icons\cloud.ico"))
         
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.set_bottom_right()
@@ -102,7 +102,7 @@ class WeatherApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.activated.connect(self.toggle_tray)
-        self.tray_icon.setIcon(QIcon(QPixmap("path\icons\cloud.png")))
+        self.tray_icon.setIcon(QIcon("path\icons\cloud.ico"))
 
         self.clear.clicked.connect(lambda: self.searchEdit.clear())
         self.search.clicked.connect(lambda: self.searh_result())
